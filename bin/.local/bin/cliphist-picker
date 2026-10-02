@@ -13,7 +13,7 @@ list=$(cliphist list 2>/dev/null)
 
 prog='
 match($2, /^\[\[ binary data .* (png|jpe?g|bmp|gif|webp) [0-9]+x[0-9]+ \]\]$/, m) {
-  # f = $1 "." m[1]
+   f = $1 "." m[1]
   system("[ -f " dir "/" f " ] || cliphist decode " $1 " > " dir "/" f)
   print $1 "\t" $2 "\0icon\x1f" dir "/" f
   next
