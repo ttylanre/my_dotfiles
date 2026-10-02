@@ -57,13 +57,31 @@
   "clock": {
     "interval": 1,
     "format": "{:%a %d %b  %H:%M:%S}",
-    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "month",
+      "on-scroll": 1,
+      "format": {
+        "months": "<span color='#cba6f7'><b>{}</b></span>",
+        "weekdays": "<span color='#6c7086'>{}</span>",
+        "today": "<span color='#89b4fa'><b><u>{}</u></b></span>"
+      }
+    },
+    "actions": { "on-scroll-up": "shift_up", "on-scroll-down": "shift_down" }
   },
 
   // ── one combined pill for hardware stuff ──
   "group/hw": {
     "orientation": "horizontal",
-    "modules": ["pulseaudio", "backlight", "network", "battery"]
+    "modules": ["idle_inhibitor", "pulseaudio", "backlight", "network", "battery"]
+  },
+
+  // click to keep the screen awake (eye = awake, slashed eye = normal)
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": { "activated": "\uf06e", "deactivated": "\uf070" },
+    "tooltip-format-activated": "Staying awake",
+    "tooltip-format-deactivated": "Idle allowed"
   },
 
   "pulseaudio": {
@@ -72,7 +90,7 @@
     "format": "{icon} {volume}%",
     "format-bluetooth": "\uf293 {volume}%",
     "format-icons": ["\uf026", "\uf027", "\uf028"],
-    "format-muted": "\uf6a9 muted",
+    "format-muted": "\udb81\udf5f muted",
     "on-click": "pavucontrol"
   },
 
@@ -98,19 +116,22 @@
     "format-charging": "󰂄 {capacity}%",
     "format-plugged": "󰂄 {capacity}%",
     "format-full": "󱈑 {capacity}%",
-    "format-icons": ["󱊡", "󱊢", "󱊣"]
+    "format-icons": ["󱊡", "󱊢", "󱊣"],
+    "tooltip-format": "{timeTo}\n{power}W · {health}% health"
   },
 
   "custom/screen-time": {
     "tooltip": true,
     "format": "\uf017 {text}",
     "exec": "screen-time",
+    "hide-empty-text": true,
     "interval": 60,
     "return-type": "json"
   },
 
   "custom/updates": {
     "exec": "updates.sh",
+    "hide-empty-text": true,
     "interval": 1800,
     "return-type": "json",
     "on-click": "kitty -e bash -c 'yay -Syu || sudo pacman -Syu'"

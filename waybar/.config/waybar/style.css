@@ -21,8 +21,7 @@
 * {
   border: none;
   border-radius: 0;
-  font-family:
-    "JetBrainsMono Nerd Font", "JetBrains Mono", "Symbols Nerd Font", monospace;
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", "Symbols Nerd Font", monospace;
   font-size: 13px;
   min-height: 0;
 }
@@ -102,6 +101,7 @@ window#waybar {
 
 /* ── audio visualiser ───────────────────────── */
 #custom-cava {
+  min-width: 150px; /* stops the bar jumping around while the pill redraws */
   color: @mauve;
   font-size: 15px;
   letter-spacing: 1px;
@@ -134,6 +134,7 @@ window#waybar {
   padding: 0 4px;
 }
 
+#idle_inhibitor,
 #pulseaudio,
 #backlight,
 #network,
@@ -149,28 +150,16 @@ window#waybar {
   border-left: 1px solid alpha(@overlay, 0.35);
 }
 
-#pulseaudio {
-  color: @red;
-}
-#pulseaudio.muted {
-  color: @overlay;
-}
-#backlight {
-  color: @peach;
-}
-#network {
-  color: @sky;
-}
-#network.disconnected {
-  color: @overlay;
-}
-#battery {
-  color: @green;
-}
+#idle_inhibitor { color: @overlay; padding: 0 8px; }
+#idle_inhibitor.activated { color: @yellow; }
+#pulseaudio  { color: @red; }
+#pulseaudio.muted { color: @overlay; }
+#backlight   { color: @peach; }
+#network     { color: @sky; }
+#network.disconnected { color: @overlay; }
+#battery     { color: @green; }
 
-#battery.warning:not(.charging) {
-  color: @yellow;
-}
+#battery.warning:not(.charging) { color: @yellow; }
 
 #battery.critical:not(.charging) {
   color: @red;
@@ -178,21 +167,13 @@ window#waybar {
 }
 
 @keyframes blink {
-  50% {
-    opacity: 0.4;
-  }
+  50% { opacity: 0.4; }
 }
 
 /* ── misc modules ───────────────────────────── */
-#custom-screen-time {
-  color: @yellow;
-}
-#custom-updates {
-  color: @teal;
-}
-#custom-updates.pending {
-  color: @peach;
-}
+#custom-screen-time { color: @yellow; }
+#custom-updates     { color: @teal; }
+#custom-updates.pending { color: @peach; }
 
 /* ── tray ───────────────────────────────────── */
 #tray {
