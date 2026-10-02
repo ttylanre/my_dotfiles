@@ -1,136 +1,183 @@
+/* Catppuccin Mocha floating-islands waybar */
+
+@define-color base     #1e1e2e;
+@define-color mantle   #181825;
+@define-color crust    #11111b;
+@define-color text     #cdd6f4;
+@define-color subtext  #a6adc8;
+@define-color overlay  #6c7086;
+@define-color surface  #313244;
+@define-color blue     #89b4fa;
+@define-color lavender #b4befe;
+@define-color mauve    #cba6f7;
+@define-color pink     #f5c2e7;
+@define-color red      #f38ba8;
+@define-color peach    #fab387;
+@define-color yellow   #f9e2af;
+@define-color green    #a6e3a1;
+@define-color teal     #94e2d5;
+@define-color sky      #89dceb;
+
 * {
   border: none;
   border-radius: 0;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", "Symbols Nerd Font", monospace;
   font-size: 13px;
   min-height: 0;
 }
 
+/* bar itself is invisible; every module is its own island */
 window#waybar {
-  background: rgba(17, 17, 27, 0.95);
-  color: #cdd6f4;
-  border-bottom: 1px solid rgba(137, 180, 250, 0.12);
+  background: transparent;
+  color: @text;
+}
+
+/* ── shared island look ─────────────────────── */
+#custom-launcher,
+#workspaces,
+#custom-cava,
+#clock,
+#mpris,
+#hw,
+#custom-screen-time,
+#custom-updates,
+#tray {
+  background: alpha(@mantle, 0.88);
+  border: 1px solid alpha(@lavender, 0.14);
+  border-radius: 14px;
+  margin: 3px 3px;
+  padding: 0 12px;
+  transition: all 0.25s ease;
+}
+
+#custom-launcher:hover,
+#mpris:hover,
+#custom-screen-time:hover,
+#custom-updates:hover {
+  background: alpha(@surface, 0.9);
+  border-color: alpha(@lavender, 0.4);
+}
+
+/* ── launcher ───────────────────────────────── */
+#custom-launcher {
+  color: @blue;
+  font-size: 15px;
+  min-width: 30px;
+  padding: 0 4px 0 0;
+  margin-left: 0;
+  /* nerd font logo glyphs sit slightly off-centre; nudge if needed */
 }
 
 /* ── workspaces ─────────────────────────────── */
 #workspaces {
-  margin: 4px 6px;
-  background: rgba(30, 31, 41, 0.6);
-  border-radius: 12px;
-  border: 1px solid rgba(137, 180, 250, 0.08);
   padding: 0 4px;
 }
 
 #workspaces button {
-  padding: 0 10px;
-  color: #45475a;
+  padding: 0 9px;
+  margin: 3px 1px;
+  color: @overlay;
   background: transparent;
   border-radius: 10px;
-  transition:
-    color 0.2s,
-    background 0.2s;
-}
-
-#workspaces button.active {
-  color: #1e1f29;
-  background: #89b4fa;
-  border-radius: 10px;
+  transition: all 0.25s ease;
 }
 
 #workspaces button:hover {
-  color: #cdd6f4;
-  background: rgba(137, 180, 250, 0.12);
-  border-radius: 10px;
+  color: @text;
+  background: alpha(@blue, 0.15);
 }
 
-/* ── window title ───────────────────────────── */
-#window {
-  color: #6c7086;
-  font-style: italic;
-  margin-left: 4px;
+#workspaces button.active {
+  color: @crust;
+  font-weight: bold;
+  background: linear-gradient(135deg, @blue, @mauve);
+  padding: 0 14px;
 }
 
-/* ── clock (floating pill) ──────────────────── */
+#workspaces button.urgent {
+  color: @crust;
+  background: @red;
+}
+
+/* ── audio visualiser ───────────────────────── */
+#custom-cava {
+  min-width: 150px; /* stops the bar jumping around while the pill redraws */
+  color: @mauve;
+  font-size: 15px;
+  letter-spacing: 1px;
+  padding: 0 14px;
+  border-color: alpha(@mauve, 0.3);
+  background: linear-gradient(90deg, alpha(@mantle, 0.9), alpha(@mauve, 0.08));
+}
+
+/* ── clock ──────────────────────────────────── */
 #clock {
-  background: rgba(137, 180, 250, 0.1);
-  color: #cdd6f4;
-  border: 1px solid rgba(137, 180, 250, 0.18);
-  border-radius: 20px;
-  padding: 2px 16px;
-  margin: 4px 0;
+  color: @text;
   font-weight: bold;
   letter-spacing: 0.04em;
+  padding: 0 20px;
+  border-color: alpha(@blue, 0.3);
 }
 
-/* ── right-side module base ─────────────────── */
-#battery,
-#network,
+/* ── now playing ────────────────────────────── */
+#mpris {
+  color: @pink;
+  font-style: italic;
+}
+
+#mpris.paused {
+  color: @overlay;
+}
+
+/* ── hardware group (one pill, thin dividers) ─ */
+#hw {
+  padding: 0 4px;
+}
+
+#idle_inhibitor,
 #pulseaudio,
-#tray,
 #backlight,
-#custom-screen-time,
-#custom-updates,
-#custom-launcher {
-  background: rgba(30, 31, 41, 0.7);
-  border: 1px solid rgba(137, 180, 250, 0.08);
-  border-radius: 12px;
-  padding: 2px 10px;
-  margin: 4px 2px;
-  color: #cdd6f4;
-  transition: background 0.2s;
-}
-
-#battery:hover,
-#network:hover,
-#pulseaudio:hover {
-  background: rgba(137, 180, 250, 0.1);
-}
-
-/* ── module accent colors ───────────────────── */
-#network {
-  color: #89dceb;
-}
-
-#custom-screen-time {
-  color: #f9e2af;
-}
-
-#pulseaudio {
-  color: #f38ba8;
-}
-
-#pulseaudio.muted {
-  color: #45475a;
-}
-
+#network,
 #battery {
-  color: #a6e3a1;
+  background: transparent;
+  padding: 0 10px;
+  margin: 0;
 }
 
-#battery.charging,
-#battery.plugged {
-  color: #a6e3a1;
+#backlight,
+#network,
+#battery {
+  border-left: 1px solid alpha(@overlay, 0.35);
 }
 
-#battery.warning:not(.charging),
-#backlight {
-  color: #fab387;
-}
+#idle_inhibitor { color: @overlay; padding: 0 8px; }
+#idle_inhibitor.activated { color: @yellow; }
+#pulseaudio  { color: @red; }
+#pulseaudio.muted { color: @overlay; }
+#backlight   { color: @peach; }
+#network     { color: @sky; }
+#network.disconnected { color: @overlay; }
+#battery     { color: @green; }
+
+#battery.warning:not(.charging) { color: @yellow; }
 
 #battery.critical:not(.charging) {
-  color: #f38ba8;
+  color: @red;
   animation: blink 1s step-start infinite;
 }
 
 @keyframes blink {
-  50% {
-    opacity: 0.5;
-  }
+  50% { opacity: 0.4; }
 }
+
+/* ── misc modules ───────────────────────────── */
+#custom-screen-time { color: @yellow; }
+#custom-updates     { color: @teal; }
+#custom-updates.pending { color: @peach; }
 
 /* ── tray ───────────────────────────────────── */
 #tray {
-  padding: 2px 8px;
+  padding: 0 10px;
 }
 
 #tray > .passive {
@@ -139,5 +186,30 @@ window#waybar {
 
 #tray > .needs-attention {
   -gtk-icon-effect: highlight;
-  background-color: rgba(243, 139, 168, 0.15);
+  background: alpha(@red, 0.18);
+  border-radius: 8px;
+}
+
+/* ── tooltips ───────────────────────────────── */
+tooltip {
+  background: @mantle;
+  border: 1px solid alpha(@lavender, 0.3);
+  border-radius: 10px;
+}
+
+tooltip label {
+  color: @text;
+  padding: 2px;
+}
+
+/* ── window title (plain text, no pill) ─────── */
+#window {
+  color: @overlay;
+  font-style: italic;
+  margin: 0 6px;
+}
+
+window#waybar.empty #window {
+  background: transparent;
+  border: none;
 }

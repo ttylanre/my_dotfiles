@@ -506,7 +506,7 @@ binds {
     Mod+Comma hotkey-overlay-title="Show Emojis" repeat=false { spawn "bash" "-c" "pkill fuzzel || fuzzel-emoji"; }
 
     Mod+V { spawn "cliphist-picker"; }
-    Mod+W repeat=false { spawn "kitty" "--class" "tui-overlay" "-e" "bash" "-lc" "exec \"$HOME/bin/wallpaper-picker.sh\""; }
+    Mod+W repeat=false { spawn "kitty" "--class" "tui-overlay" "-e" "bash" "-lc" "exec \"$HOME/.local/bin/wallpaper-picker.sh\""; }
     Mod+Alt+W hotkey-overlay-title="Random Wallpaper" { spawn "random-wallpaper"; }
 
     // Cycle night light state (Off -> 4500K -> 3500K -> 2700K)

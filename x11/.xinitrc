@@ -1,1 +1,1 @@
-exec "$HOME/bin/start_dwm.sh"
+exec "$HOME/.local/bin/start_dwm.sh"
