@@ -39,6 +39,8 @@ window#waybar {
 #clock,
 #mpris,
 #hw,
+#stats,
+#custom-power,
 #custom-screen-time,
 #custom-updates,
 #tray {
@@ -52,6 +54,7 @@ window#waybar {
 
 #custom-launcher:hover,
 #mpris:hover,
+#custom-power:hover,
 #custom-screen-time:hover,
 #custom-updates:hover {
   background: alpha(@surface, 0.9);
@@ -134,7 +137,6 @@ window#waybar {
   padding: 0 4px;
 }
 
-#idle_inhibitor,
 #pulseaudio,
 #backlight,
 #network,
@@ -144,19 +146,18 @@ window#waybar {
   margin: 0;
 }
 
-#backlight,
+#brightness,
 #network,
 #battery {
   border-left: 1px solid alpha(@overlay, 0.35);
 }
 
-#idle_inhibitor { color: @overlay; padding: 0 8px; }
-#idle_inhibitor.activated { color: @yellow; }
 #pulseaudio  { color: @red; }
 #pulseaudio.muted { color: @overlay; }
 #backlight   { color: @peach; }
 #network     { color: @sky; }
-#network.disconnected { color: @overlay; }
+#network.disconnected,
+#network.disabled { color: @overlay; }
 #battery     { color: @green; }
 
 #battery.warning:not(.charging) { color: @yellow; }
@@ -168,6 +169,89 @@ window#waybar {
 
 @keyframes blink {
   50% { opacity: 0.4; }
+}
+
+/* sliders that slide out on hover (knob hidden, thin bar) */
+#pulseaudio-slider,
+#backlight-slider {
+  padding: 0 8px 0 2px;
+  margin: 0;
+}
+
+slider {
+  opacity: 0;
+  min-width: 0;
+  min-height: 0;
+  background: none;
+  box-shadow: none;
+}
+
+trough {
+  min-width: 60px;
+  min-height: 4px;
+  border-radius: 4px;
+  background: alpha(@overlay, 0.4);
+}
+
+trough highlight {
+  border-radius: 4px;
+  background-image: none;
+  background-color: @lavender;
+}
+
+/* ── stats drawer ───────────────────────────── */
+#stats {
+  padding: 0 4px;
+}
+
+#custom-arrow,
+#cpu,
+#memory,
+#temperature {
+  background: transparent;
+  padding: 0 8px;
+  margin: 0;
+}
+
+#custom-arrow { color: @overlay; font-size: 15px; }
+#custom-arrow:hover { color: @text; }
+
+#cpu         { color: @blue; }
+#memory      { color: @mauve; }
+#temperature { color: @peach; }
+
+#cpu.warning,
+#memory.warning { color: @yellow; }
+
+#cpu.critical,
+#memory.critical,
+#temperature.critical { color: @red; }
+
+/* ── power button + menus ───────────────────── */
+#custom-power {
+  color: @red;
+  padding: 0 11px;
+}
+
+#custom-power:hover {
+  background: alpha(@red, 0.15);
+  border-color: alpha(@red, 0.4);
+}
+
+menu {
+  background: @mantle;
+  color: @text;
+  border: 1px solid alpha(@lavender, 0.3);
+  border-radius: 10px;
+}
+
+menu > * {
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+
+menu > *:hover {
+  background: alpha(@blue, 0.15);
 }
 
 /* ── misc modules ───────────────────────────── */
