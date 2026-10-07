@@ -1,0 +1,19 @@
+/* gruvbox palette: same variable names in every theme */
+
+@define-color base     #32302f;
+@define-color mantle   #282828;
+@define-color crust    #1d2021;
+@define-color text     #ebdbb2;
+@define-color subtext  #d5c4a1;
+@define-color overlay  #928374;
+@define-color surface  #3c3836;
+@define-color blue     #83a598;
+@define-color lavender #a89984;
+@define-color mauve    #d3869b;
+@define-color pink     #d3869b;
+@define-color red      #fb4934;
+@define-color peach    #fe8019;
+@define-color yellow   #fabd2f;
+@define-color green    #b8bb26;
+@define-color teal     #8ec07c;
+@define-color sky      #83a598;

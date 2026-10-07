@@ -1,0 +1,19 @@
+/* tokyonight palette: same variable names in every theme */
+
+@define-color base     #1f2335;
+@define-color mantle   #1a1b26;
+@define-color crust    #16161e;
+@define-color text     #c0caf5;
+@define-color subtext  #a9b1d6;
+@define-color overlay  #565f89;
+@define-color surface  #292e42;
+@define-color blue     #7aa2f7;
+@define-color lavender #9aa5ce;
+@define-color mauve    #bb9af7;
+@define-color pink     #ff7eb6;
+@define-color red      #f7768e;
+@define-color peach    #ff9e64;
+@define-color yellow   #e0af68;
+@define-color green    #9ece6a;
+@define-color teal     #73daca;
+@define-color sky      #7dcfff;

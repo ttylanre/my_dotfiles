@@ -1,22 +1,7 @@
-/* Catppuccin Mocha floating-islands waybar */
+/* floating-islands waybar */
 
-@define-color base     #1e1e2e;
-@define-color mantle   #181825;
-@define-color crust    #11111b;
-@define-color text     #cdd6f4;
-@define-color subtext  #a6adc8;
-@define-color overlay  #6c7086;
-@define-color surface  #313244;
-@define-color blue     #89b4fa;
-@define-color lavender #b4befe;
-@define-color mauve    #cba6f7;
-@define-color pink     #f5c2e7;
-@define-color red      #f38ba8;
-@define-color peach    #fab387;
-@define-color yellow   #f9e2af;
-@define-color green    #a6e3a1;
-@define-color teal     #94e2d5;
-@define-color sky      #89dceb;
+/* colours live in colors/colors.css; swap with scripts/theme.sh <name> */
+@import "colors/colors.css";
 
 * {
   border: none;
@@ -37,9 +22,9 @@ window#waybar {
 #workspaces,
 #custom-cava,
 #clock,
-#mpris,
 #hw,
 #stats,
+#custom-notification,
 #custom-power,
 #custom-screen-time,
 #custom-updates,
@@ -53,7 +38,7 @@ window#waybar {
 }
 
 #custom-launcher:hover,
-#mpris:hover,
+#custom-notification:hover,
 #custom-power:hover,
 #custom-screen-time:hover,
 #custom-updates:hover {
@@ -113,6 +98,12 @@ window#waybar {
   background: linear-gradient(90deg, alpha(@mantle, 0.9), alpha(@mauve, 0.08));
 }
 
+/* colour follows loudness (class set by cava.sh) */
+#custom-cava.idle { color: @overlay;  border-color: alpha(@overlay, 0.25); }
+#custom-cava.low  { color: @blue;     border-color: alpha(@blue, 0.35); }
+#custom-cava.mid  { color: @mauve;    border-color: alpha(@mauve, 0.4); }
+#custom-cava.high { color: @pink;     border-color: alpha(@pink, 0.55); }
+
 /* ── clock ──────────────────────────────────── */
 #clock {
   color: @text;
@@ -122,10 +113,30 @@ window#waybar {
   border-color: alpha(@blue, 0.3);
 }
 
-/* ── now playing ────────────────────────────── */
+/* ── now playing (invisible until a player is running) ── */
 #mpris {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  min-width: 0;
+}
+
+#mpris.playing,
+#mpris.paused {
+  background: alpha(@mantle, 0.88);
+  border: 1px solid alpha(@lavender, 0.14);
+  border-radius: 14px;
+  margin: 3px 3px;
+  padding: 0 12px;
   color: @pink;
   font-style: italic;
+}
+
+#mpris.playing:hover,
+#mpris.paused:hover {
+  background: alpha(@surface, 0.9);
+  border-color: alpha(@lavender, 0.4);
 }
 
 #mpris.paused {
@@ -144,6 +155,14 @@ window#waybar {
   background: transparent;
   padding: 0 10px;
   margin: 0;
+}
+
+/* icon-only modules share one fixed width so nothing shifts between states */
+#pulseaudio,
+#backlight,
+#network {
+  min-width: 20px;
+  font-size: 15px;
 }
 
 #brightness,
@@ -226,6 +245,18 @@ trough highlight {
 #cpu.critical,
 #memory.critical,
 #temperature.critical { color: @red; }
+
+/* ── notifications (swaync) ─────────────────── */
+#custom-notification {
+  color: @text;
+  padding: 0 11px;
+}
+#custom-notification.notification,
+#custom-notification.inhibited-notification { color: @peach; }
+#custom-notification.dnd-none,
+#custom-notification.dnd-notification,
+#custom-notification.dnd-inhibited-none,
+#custom-notification.dnd-inhibited-notification { color: @overlay; }
 
 /* ── power button + menus ───────────────────── */
 #custom-power {

@@ -1,0 +1,19 @@
+/* mocha palette: same variable names in every theme */
+
+@define-color base     #1e1e2e;
+@define-color mantle   #181825;
+@define-color crust    #11111b;
+@define-color text     #cdd6f4;
+@define-color subtext  #a6adc8;
+@define-color overlay  #6c7086;
+@define-color surface  #313244;
+@define-color blue     #89b4fa;
+@define-color lavender #b4befe;
+@define-color mauve    #cba6f7;
+@define-color pink     #f5c2e7;
+@define-color red      #f38ba8;
+@define-color peach    #fab387;
+@define-color yellow   #f9e2af;
+@define-color green    #a6e3a1;
+@define-color teal     #94e2d5;
+@define-color sky      #89dceb;

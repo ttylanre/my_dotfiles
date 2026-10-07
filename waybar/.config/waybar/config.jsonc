@@ -9,7 +9,7 @@
 
   "modules-left": ["custom/launcher", "niri/workspaces", "custom/cava", "niri/window"],
   "modules-center": ["clock"],
-  "modules-right": ["mpris", "group/hw", "group/stats", "custom/screen-time", "custom/updates", "tray", "custom/power"],
+  "modules-right": ["mpris", "group/hw", "group/stats", "custom/screen-time", "custom/updates", "tray", "custom/notification", "custom/power"],
 
   "custom/launcher": {
     "format": "\uf322",
@@ -26,6 +26,7 @@
   // script lives at ~/.config/waybar/scripts/cava.sh and needs `cava` installed
   "custom/cava": {
     "exec": "~/.config/waybar/scripts/cava.sh",
+    "return-type": "json",
     "format": "{}",
     "tooltip": false
   },
@@ -96,7 +97,7 @@
     "format": "{icon}",
     "format-bluetooth": "\uf293",
     "format-muted": "\udb81\udf5f",
-    "format-icons": ["\uf026", "\uf027", "\uf028"],
+    "format-icons": ["\udb81\udd7f", "\udb81\udd80", "\udb81\udd7e"],
     "tooltip-format": "{desc}\n{volume}%",
     "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
     "on-click-right": "pavucontrol"
@@ -125,7 +126,7 @@
   // icon only; details in the tooltip, right-click for a menu
   "network": {
     "interval": 5,
-    "format-wifi": "\uf1eb",
+    "format-wifi": "\udb81\udda9",
     "format-ethernet": "󰈀",
     "format-disconnected": "󰤮",
     "format-disabled": "󰤮",
@@ -189,6 +190,28 @@
     "format-icons": ["\uf2cb", "\uf2ca", "\uf2c9", "\uf2c8", "\uf2c7"]
   },
 
+  // swaync: left-click toggles the panel, right-click toggles Do Not Disturb
+  "custom/notification": {
+    "tooltip": false,
+    "format": "{icon}",
+    "format-icons": {
+      "notification": "\uf0f3<span foreground='#f38ba8'><sup>\uf111</sup></span>",
+      "none": "\uf0a2",
+      "dnd-notification": "\uf1f6<span foreground='#f38ba8'><sup>\uf111</sup></span>",
+      "dnd-none": "\uf1f6",
+      "inhibited-notification": "\uf0f3<span foreground='#f38ba8'><sup>\uf111</sup></span>",
+      "inhibited-none": "\uf0a2",
+      "dnd-inhibited-notification": "\uf1f6<span foreground='#f38ba8'><sup>\uf111</sup></span>",
+      "dnd-inhibited-none": "\uf1f6"
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
+  },
+
   // left-click opens the power menu
   "custom/power": {
     "format": "\uf011",
@@ -196,10 +219,11 @@
     "menu": "on-click",
     "menu-file": "~/.config/waybar/context/power.xml",
     "menu-actions": {
-      "action-1": "systemctl suspend",
-      "action-2": "niri msg action quit",
-      "action-3": "systemctl reboot",
-      "action-4": "systemctl poweroff"
+      "action-1": "~/.config/waybar/scripts/lock.sh",
+      "action-2": "systemctl suspend",
+      "action-3": "niri msg action quit",
+      "action-4": "systemctl reboot",
+      "action-5": "systemctl poweroff"
     }
   },
 
