@@ -525,7 +525,7 @@ binds {
     Mod+Ctrl+P { spawn "kitty" "--class" "tui-overlay" "-e" "pkg-manage"; }
     Mod+Ctrl+A { spawn "kitty" "--class" "tui-overlay" "-e" "wiremix"; }
     Mod+Ctrl+B { spawn "kitty" "--class" "tui-overlay" "-e" "bluetui"; }
-    Mod+Ctrl+W { spawn "kitty" "--class" "tui-overlay" "-e" "nmtui"; }
+    Mod+Ctrl+W { spawn "sh" "-c" "NEWT_COLORS=$(tr '\n' ' ' < ~/.config/nmtui/theme) kitty --class tui-overlay -e nmtui"; }
     Mod+Ctrl+T { spawn "kitty" "--class" "tui-overlay" "-e" "btop"; }
     Mod+Ctrl+D { spawn "kitty" "--class" "tui-overlay" "-e" "lazydocker"; }
 

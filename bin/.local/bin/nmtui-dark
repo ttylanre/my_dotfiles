@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+export NEWT_COLORS=$(tr '\n' ' ' < ~/.config/nmtui/theme)
+exec nmtui "$@"

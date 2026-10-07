@@ -124,9 +124,9 @@
   },
 
   // icon only; details in the tooltip, right-click for a menu
-  "network": {
+"network": {
     "interval": 5,
-    "format-wifi": "\udb81\udda9",
+    "format-wifi": "󰤨",
     "format-ethernet": "󰈀",
     "format-disconnected": "󰤮",
     "format-disabled": "󰤮",
@@ -134,12 +134,12 @@
     "tooltip-format-ethernet": "{ifname} · {ipaddr}\n↑ {bandwidthUpBytes}  ↓ {bandwidthDownBytes}",
     "tooltip-format-disconnected": "No network connection",
     "tooltip-format-disabled": "Network disabled",
-    "on-click": "kitty -e nmtui",
+    "on-click": "kitty --class tui-overlay -e nmtui-dark",
     "menu": "on-click-right",
     "menu-file": "~/.config/waybar/context/network.xml",
     "menu-actions": {
       "action-1": "bash -c '[[ $(nmcli radio wifi) == enabled ]] && nmcli radio wifi off || nmcli radio wifi on'",
-      "action-2": "kitty -e nmtui",
+      "action-2": "kitty --class tui-overlay -e nmtui-dark",
       "action-3": "nm-connection-editor"
     }
   },

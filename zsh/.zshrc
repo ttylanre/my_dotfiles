@@ -365,6 +365,7 @@ pxc-stealth-win() {
     proxychains4 -q curl -A "$UA_WINDOWS" "$@"
 }
 
+alias nmtui="NEWT_COLORS=\$(tr '\n' ' ' < ~/.config/nmtui/theme) nmtui"
 
 # ------------------------------------------------------------
 # BANNER & TODO SYSTEM
