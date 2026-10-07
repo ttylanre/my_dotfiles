@@ -24,10 +24,7 @@ window#waybar {
 #clock,
 #hw,
 #stats,
-#custom-notification,
-#custom-power,
-#custom-screen-time,
-#custom-updates,
+#session,
 #tray {
   background: alpha(@mantle, 0.88);
   border: 1px solid alpha(@lavender, 0.14);
@@ -37,11 +34,7 @@ window#waybar {
   transition: all 0.25s ease;
 }
 
-#custom-launcher:hover,
-#custom-notification:hover,
-#custom-power:hover,
-#custom-screen-time:hover,
-#custom-updates:hover {
+#custom-launcher:hover {
   background: alpha(@surface, 0.9);
   border-color: alpha(@lavender, 0.4);
 }
@@ -99,7 +92,15 @@ window#waybar {
 }
 
 /* colour follows loudness (class set by cava.sh) */
-#custom-cava.idle { color: @overlay;  border-color: alpha(@overlay, 0.25); }
+#custom-cava.idle {
+  color: @overlay;
+  /* no audio: collapse so it takes no space (fallback if hide-empty-text is unsupported) */
+  background: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
 #custom-cava.low  { color: @blue;     border-color: alpha(@blue, 0.35); }
 #custom-cava.mid  { color: @mauve;    border-color: alpha(@mauve, 0.4); }
 #custom-cava.high { color: @pink;     border-color: alpha(@pink, 0.55); }
@@ -226,10 +227,16 @@ trough highlight {
 #custom-arrow,
 #cpu,
 #memory,
-#temperature {
+#temperature,
+#custom-screen-time,
+#custom-updates {
   background: transparent;
-  padding: 0 8px;
+  padding: 0 7px;
   margin: 0;
+}
+
+#custom-screen-time {
+  border-left: 1px solid alpha(@overlay, 0.35);
 }
 
 #custom-arrow { color: @overlay; font-size: 15px; }
@@ -247,9 +254,23 @@ trough highlight {
 #temperature.critical { color: @red; }
 
 /* ── notifications (swaync) ─────────────────── */
+#session {
+  padding: 0 2px;
+}
+
+#custom-notification,
+#custom-power {
+  background: transparent;
+  margin: 0;
+  padding: 0 11px;
+}
+
+#custom-power {
+  border-left: 1px solid alpha(@overlay, 0.35);
+}
+
 #custom-notification {
   color: @text;
-  padding: 0 11px;
 }
 #custom-notification.notification,
 #custom-notification.inhibited-notification { color: @peach; }

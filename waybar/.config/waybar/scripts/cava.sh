@@ -8,12 +8,11 @@
 
 BARS=16
 
-flat=""
-for ((i = 0; i < BARS; i++)); do flat+="▁"; done
-emit_flat() { printf '{"text":"%s","class":"idle"}\n' "$flat"; }
+# idle = empty text, so the pill collapses and takes no space on the bar
+emit_flat() { printf '{"text":"","class":"idle"}\n'; }
 
 cfg=$(mktemp)
-cat > "$cfg" << CFG
+cat >"$cfg" <<CFG
 [general]
 framerate = 30
 bars = $BARS
@@ -36,15 +35,15 @@ CFG
 trap 'rm -f "$cfg"; pkill -P $$' EXIT
 
 while true; do
-  # wait until the audio server is actually up (boot race)
-  until pactl info > /dev/null 2>&1; do
-    emit_flat
-    sleep 1
-  done
+	# wait until the audio server is actually up (boot race)
+	until pactl info >/dev/null 2>&1; do
+		emit_flat
+		sleep 1
+	done
 
-  cava -p "$cfg" 2> /dev/null \
-    | grep --line-buffered -E '^[0-9;]+$' \
-    | awk '
+	cava -p "$cfg" 2>/dev/null |
+		grep --line-buffered -E '^[0-9;]+$' |
+		awk '
       BEGIN { split("▁ ▂ ▃ ▄ ▅ ▆ ▇ █", g, " ") }
       {
         n = split($0, v, ";"); out = ""; sum = 0; cnt = 0
@@ -54,11 +53,12 @@ while true; do
         }
         avg = cnt ? sum / cnt : 0
         cls = (avg < 0.3) ? "idle" : (avg < 2) ? "low" : (avg < 3.5) ? "mid" : "high"
+        if (cls == "idle") out = ""
         printf "{\"text\":\"%s\",\"class\":\"%s\"}\n", out, cls
         fflush()
       }'
 
-  # cava exited: show idle bars, wait, retry
-  emit_flat
-  sleep 1
+	# cava exited: show idle bars, wait, retry
+	emit_flat
+	sleep 1
 done

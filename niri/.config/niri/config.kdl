@@ -683,7 +683,8 @@ binds {
 
 // ── Autostart ──────────────────────────────────────────────────────────────
 spawn-at-startup "waybar"
-spawn-at-startup "mako"
+//spawn-at-startup "mako"
+spawn-at-startup "swaync"
 spawn-at-startup "udiskie" "--smart-tray"
 spawn-at-startup "niri-screen-time" "-daemon"
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"

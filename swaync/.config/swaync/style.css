@@ -1,0 +1,207 @@
+/* swaync, styled to match the waybar islands.
+   Colours come from waybar's palette so scripts/theme.sh themes both. */
+@import "../waybar/colors/colors.css";
+
+* {
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", "Symbols Nerd Font", monospace;
+  font-size: 13px;
+}
+
+/* ── popup notifications + list rows ────────── */
+.notification-row {
+  outline: none;
+  background: transparent;
+}
+
+.notification-row:focus,
+.notification-row:hover {
+  background: transparent;
+}
+
+.notification-background {
+  background: alpha(@mantle, 0.95);
+  border: 1px solid alpha(@lavender, 0.18);
+  border-radius: 14px;
+  margin: 6px 8px;
+  padding: 0;
+}
+
+.notification-background:hover {
+  border-color: alpha(@lavender, 0.4);
+}
+
+.notification {
+  background: transparent;
+  border: none;
+  border-radius: 14px;
+  padding: 0;
+  margin: 0;
+}
+
+.notification.critical,
+.critical .notification-background {
+  border-color: alpha(@red, 0.7);
+}
+
+.notification-content {
+  background: transparent;
+  padding: 10px 12px;
+}
+
+.summary {
+  color: @text;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.time {
+  color: @overlay;
+  font-size: 11px;
+  margin-right: 8px;
+}
+
+.body {
+  color: @subtext;
+}
+
+.image,
+.notification-icon {
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+.body-image {
+  border-radius: 10px;
+  margin-top: 6px;
+}
+
+/* close button */
+.close-button {
+  background: @surface;
+  color: @text;
+  border-radius: 100%;
+  margin: 8px 8px 0 0;
+  padding: 0 4px;
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.close-button:hover {
+  background: @red;
+  color: @crust;
+}
+
+/* action buttons on a notification */
+.notification-action {
+  background: alpha(@surface, 0.8);
+  color: @text;
+  border: none;
+  border-radius: 10px;
+  margin: 4px 8px 8px 8px;
+  padding: 4px 10px;
+}
+
+.notification-action:hover {
+  background: alpha(@blue, 0.25);
+  color: @blue;
+}
+
+/* ── control center panel ───────────────────── */
+.control-center {
+  background: alpha(@crust, 0.95);
+  border: 1px solid alpha(@lavender, 0.2);
+  border-radius: 18px;
+  padding: 6px;
+}
+
+.control-center-list {
+  background: transparent;
+}
+
+.control-center .notification-background {
+  background: alpha(@mantle, 0.9);
+}
+
+.blank-window {
+  background: transparent;
+}
+
+/* title row + clear button */
+.widget-title {
+  margin: 10px 12px 4px 12px;
+  color: @text;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.widget-title > button {
+  background: alpha(@surface, 0.8);
+  color: @text;
+  border: none;
+  border-radius: 10px;
+  padding: 4px 14px;
+  font-size: 12px;
+}
+
+.widget-title > button:hover {
+  background: @blue;
+  color: @crust;
+}
+
+/* do not disturb switch */
+.widget-dnd {
+  margin: 6px 12px;
+  color: @subtext;
+  font-size: 13px;
+}
+
+.widget-dnd > switch {
+  background: @surface;
+  border: none;
+  border-radius: 12px;
+}
+
+.widget-dnd > switch:checked {
+  background: @mauve;
+}
+
+.widget-dnd > switch slider {
+  background: @text;
+  border-radius: 12px;
+}
+
+/* media player widget */
+.widget-mpris {
+  margin: 6px 12px;
+}
+
+.widget-mpris-player {
+  background: alpha(@surface, 0.5);
+  border-radius: 14px;
+  padding: 8px;
+  color: @text;
+}
+
+.widget-mpris-title {
+  font-weight: bold;
+  color: @text;
+}
+
+.widget-mpris-subtitle {
+  color: @subtext;
+}
+
+.widget-mpris button {
+  background: transparent;
+  color: @text;
+  border-radius: 100%;
+}
+
+.widget-mpris button:hover {
+  background: alpha(@blue, 0.2);
+}
+
+/* empty state */
+.control-center-list-placeholder {
+  color: @overlay;
+}

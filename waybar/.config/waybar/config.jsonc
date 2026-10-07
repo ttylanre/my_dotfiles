@@ -7,9 +7,9 @@
   "margin-left": 8,
   "margin-right": 8,
 
-  "modules-left": ["custom/launcher", "niri/workspaces", "custom/cava", "niri/window"],
+  "modules-left": ["custom/launcher", "niri/workspaces", "custom/cava"],
   "modules-center": ["clock"],
-  "modules-right": ["mpris", "group/hw", "group/stats", "custom/screen-time", "custom/updates", "tray", "custom/notification", "custom/power"],
+  "modules-right": ["mpris", "group/hw", "group/stats", "tray", "group/session"],
 
   "custom/launcher": {
     "format": "\uf322",
@@ -27,6 +27,7 @@
   "custom/cava": {
     "exec": "~/.config/waybar/scripts/cava.sh",
     "return-type": "json",
+    "hide-empty-text": true,   // pill disappears when nothing is playing
     "format": "{}",
     "tooltip": false
   },
@@ -124,9 +125,9 @@
   },
 
   // icon only; details in the tooltip, right-click for a menu
-"network": {
+  "network": {
     "interval": 5,
-    "format-wifi": "󰤨",
+    "format-wifi": "\udb81\udda9",
     "format-ethernet": "󰈀",
     "format-disconnected": "󰤮",
     "format-disabled": "󰤮",
@@ -162,7 +163,13 @@
       "transition-left-to-right": false,
       "click-to-reveal": true
     },
-    "modules": ["custom/arrow", "cpu", "memory", "temperature"]
+    "modules": ["custom/arrow", "cpu", "memory", "temperature", "custom/screen-time", "custom/updates"]
+  },
+
+  // notifications + power share one pill
+  "group/session": {
+    "orientation": "horizontal",
+    "modules": ["custom/notification", "custom/power"]
   },
 
   "custom/arrow": {
@@ -245,6 +252,7 @@
   },
 
   "tray": {
-    "spacing": 8
+    "spacing": 8,
+    "show-passive-items": false
   }
 }
