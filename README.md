@@ -6,14 +6,28 @@
 
 Personal Linux-focused configs managed with **GNU Stow**. The installer links configs; it does not replace conflicting files or attempt to install every application referenced by the configs.
 
-## Screenshots
+## 📸 Showcase
 
-<table>
-  <tr>
-    <td><img src="./screenshots/Screenshot from 2026-09-19 21-57-10.png" alt="Screenshot 1"/></td>
-    <td><img src="./screenshots/Screenshot from 2026-09-19 21-33-06.png" alt="Screenshot 2"/></td>
-  </tr>
-</table>
+### 01. Workspace & Tiling
+![Workspace Overview](./screenshots/hero.webp)
+> **Window Manager / Compositor:** Niri / Wayland
+> **Status Bar:** Waybar
+> **Color Palette:** Catppuccin Mocha
+
+### 02. Development Workflow
+![Neovim Setup](./screenshots/editor.webp)
+> **Editor:** Neovim (Lua config)
+> **Plugins:** Telescope, Treesitter, Mason, Native LSP
+> **Terminal:** Kitty
+
+### 03. Utilities & CLI
+![CLI Tools](./screenshots/utilities.webp)
+> **System Monitor:** htop
+> **Launcher:** Fuzzel
+> **Fetch Tool:** Fastfetch
+> **Networking Tool:** nmtui
+> **Matrix:** unimatrix
+> **Visualiser:** cava
 
 ## Quick start
 

@@ -34,7 +34,7 @@ output "HDMI-A-1" {
 output "HDMI-A-1" {
     mode "1920x1080@60.000"
     position x=1366 y=0
-    scale 1.5
+    scale 1.3
 }
 
 output "PNP(CTV) CultraviewTV 0x01010101" {
