@@ -17,28 +17,19 @@ with **Neovim**, **Tmux**, **Zsh**, Git, Starship, and CLI utilities.
 > and use `--dry-run` before applying it to a system with existing dotfiles.
 > The installer creates links and intentionally does not overwrite conflicts.
 
-## 📸 Showcase
+## Screenshots
 
-### 01. Workspace & Tiling
-![Workspace Overview](./screenshots/hero.webp)
-> **Window Manager / Compositor:** Niri / Wayland 
-> **Status Bar:** Waybar 
-> **Color Palette:** Catppuccin Mocha 
+### Niri Wayland workspace
 
-### 02. Development Workflow
-![Neovim Setup](./screenshots/editor.webp)
-> **Editor:** Neovim (Lua config)
-> **Plugins:** Fzf-lua, Treesitter, Mason, Native LSP
-> **Terminal:** Kitty
+![Niri Wayland desktop on EndeavourOS using Waybar and the Catppuccin Mocha theme](./screenshots/hero.webp)
 
-### 03. Utilities & CLI
-![CLI Tools](./screenshots/utilities.webp)
-> **System Monitor:** htop
-> **Launcher:** Fuzzel
-> **Fetch Tool:** Fastfetch
-> **Networking Tool:** nmtui
-> **Matrix:** unimatrix
-> **Visualiser:** cava
+### Neovim development workflow
+
+![Neovim configuration with Kitty terminal and Tmux on EndeavourOS](./screenshots/editor.webp)
+
+### Linux terminal utilities
+
+![Fuzzel, Fastfetch, htop, cava, nmtui, and CLI tools in the dotfiles setup](./screenshots/utilities.webp)
 
 ## Quick start
 
