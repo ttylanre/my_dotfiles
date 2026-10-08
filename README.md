@@ -17,7 +17,7 @@ Personal Linux-focused configs managed with **GNU Stow**. The installer links co
 ### 02. Development Workflow
 ![Neovim Setup](./screenshots/editor.webp)
 > **Editor:** Neovim (Lua config)
-> **Plugins:** Telescope, Treesitter, Mason, Native LSP
+> **Plugins:** Fzf-lua, Treesitter, Mason, Native LSP
 > **Terminal:** Kitty
 
 ### 03. Utilities & CLI
