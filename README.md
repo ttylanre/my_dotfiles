@@ -1,7 +1,7 @@
 # EndeavourOS / Arch Linux Niri Wayland Dotfiles
 
-[![CI](https://img.shields.io/github/actions/workflow/status/lanre647/my_dotfiles/dotfiles.yml?label=CI&logo=github)](https://github.com/lanre647/my_dotfiles/actions)
-[![License](https://img.shields.io/github/license/lanre647/my_dotfiles?label=license)](LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/tty-lanre/my_dotfiles/dotfiles.yml?label=CI&logo=github)](https://github.com/lanre647/my_dotfiles/actions)
+[![License](https://img.shields.io/github/license/tty-lanre/my_dotfiles?label=license)](LICENSE)
 [![GNU Stow](https://img.shields.io/badge/managed%20with-GNU%20Stow-green)](https://www.gnu.org/software/stow/)
 [![Wayland](https://img.shields.io/badge/session-Wayland-4c7899)](#desktop-stack)
 
@@ -36,13 +36,13 @@ with **Neovim**, **Tmux**, **Zsh**, Git, Starship, and CLI utilities.
 Requirements for the remote bootstrap: Bash, Git, and an internet connection. It clones into `~/.dotfiles`, initializes the bundled submodules, installs missing base tools, and links all packages.
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/lanre647/my_dotfiles/main/bootstrap.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/tty-lanre/my_dotfiles/main/bootstrap.sh)
 ```
 
 Review the installer actions first with a local checkout:
 
 ```bash
-git clone --recurse-submodules https://github.com/lanre647/my_dotfiles.git ~/.dotfiles
+git clone --recurse-submodules https://github.com/tty-lanre/my_dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./install.sh --dry-run
 ./install.sh
