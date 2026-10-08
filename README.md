@@ -1,18 +1,29 @@
-# 📦 Dotfiles
+# EndeavourOS / Arch Linux Niri Wayland Dotfiles
 
-[![CI](https://img.shields.io/github/actions/workflow/status/lanre647/my_dotfiles/dotfiles.yml?label=CI&logo=github)](#)
-[![Manager](https://img.shields.io/badge/managed%20with-stow-green)](#)
-[![License](https://img.shields.io/badge/license-MIT-lightgrey)](#)
+[![CI](https://img.shields.io/github/actions/workflow/status/lanre647/my_dotfiles/dotfiles.yml?label=CI&logo=github)](https://github.com/lanre647/my_dotfiles/actions)
+[![License](https://img.shields.io/github/license/lanre647/my_dotfiles?label=license)](LICENSE)
+[![GNU Stow](https://img.shields.io/badge/managed%20with-GNU%20Stow-green)](https://www.gnu.org/software/stow/)
+[![Wayland](https://img.shields.io/badge/session-Wayland-4c7899)](#desktop-stack)
 
-Personal Linux-focused configs managed with **GNU Stow**. The installer links configs; it does not replace conflicting files or attempt to install every application referenced by the configs.
+A reproducible **EndeavourOS and Arch Linux Niri Wayland rice** with
+developer-focused dotfiles, managed through GNU Stow.
+
+It includes a Catppuccin Mocha desktop built around **Niri**, **Waybar**,
+**Fuzzel**, **Kitty**, **Mako**, and **swaylock**, plus a terminal workflow
+with **Neovim**, **Tmux**, **Zsh**, Git, Starship, and CLI utilities.
+
+> [!WARNING]
+> This repository is personal but designed to be reusable. Review the scripts
+> and use `--dry-run` before applying it to a system with existing dotfiles.
+> The installer creates links and intentionally does not overwrite conflicts.
 
 ## 📸 Showcase
 
 ### 01. Workspace & Tiling
 ![Workspace Overview](./screenshots/hero.webp)
-> **Window Manager / Compositor:** Niri / Wayland
-> **Status Bar:** Waybar
-> **Color Palette:** Catppuccin Mocha
+> **Window Manager / Compositor:** Niri / Wayland 
+> **Status Bar:** Waybar 
+> **Color Palette:** Catppuccin Mocha 
 
 ### 02. Development Workflow
 ![Neovim Setup](./screenshots/editor.webp)
