@@ -83,7 +83,6 @@ window#waybar {
 
 /* ── audio visualiser ───────────────────────── */
 #custom-cava {
-  min-width: 150px; /* stops the bar jumping around while the pill redraws */
   color: @mauve;
   font-size: 15px;
   letter-spacing: 1px;

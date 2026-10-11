@@ -6,7 +6,7 @@
 # Waits for PipeWire at boot, restarts cava if it dies, and filters output so
 # stray text can never reach the bar.
 
-BARS=16
+BARS=12 # width of the visualiser: 8 = tiny, 12 = compact, 16 = wide
 
 # idle = empty text, so the pill collapses and takes no space on the bar
 emit_flat() { printf '{"text":"","class":"idle"}\n'; }
