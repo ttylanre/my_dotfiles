@@ -115,8 +115,8 @@ window#waybar {
   border-color: alpha(@blue, 0.3);
 }
 
-/* ── now playing (invisible until a player is running) ── */
-#mpris {
+/* ── now playing: scrolling title (invisible until a player is running) ── */
+#custom-media {
   padding: 0;
   margin: 0;
   border: none;
@@ -124,8 +124,8 @@ window#waybar {
   min-width: 0;
 }
 
-#mpris.playing,
-#mpris.paused {
+#custom-media.playing,
+#custom-media.paused {
   background: alpha(@mantle, 0.88);
   border: 1px solid alpha(@lavender, 0.14);
   border-radius: 14px;
@@ -135,13 +135,13 @@ window#waybar {
   font-style: italic;
 }
 
-#mpris.playing:hover,
-#mpris.paused:hover {
+#custom-media.playing:hover,
+#custom-media.paused:hover {
   background: alpha(@surface, 0.9);
   border-color: alpha(@lavender, 0.4);
 }
 
-#mpris.paused {
+#custom-media.paused {
   color: @overlay;
 }
 

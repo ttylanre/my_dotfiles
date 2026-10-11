@@ -9,7 +9,7 @@
 
   "modules-left": ["custom/launcher", "niri/workspaces", "custom/cava"],
   "modules-center": ["clock", "custom/weather"],
-  "modules-right": ["mpris", "group/hw", "group/stats", "tray", "group/session"],
+  "modules-right": ["custom/media", "group/hw", "group/stats", "tray", "group/session"],
 
   "custom/launcher": {
     "format": "\uf322",
@@ -43,17 +43,16 @@
     }
   },
 
-  // now playing (hides itself when no player is running)
-  "mpris": {
-    "format": "{player_icon} {title} - {artist}",
-    "format-paused": "{status_icon} {title}",
-    "player-icons": { "default": "󰎆" },
-    "status-icons": { "paused": "󰏤" },
-    "max-length": 22,
+  // now playing with a scrolling title (scripts/media.sh, needs playerctl)
+  "custom/media": {
+    "exec": "~/.config/waybar/scripts/media.sh",
+    "return-type": "json",
+    "hide-empty-text": true,
+    "escape": true,
     "on-click": "playerctl play-pause",
     "on-scroll-up": "playerctl next",
     "on-scroll-down": "playerctl previous",
-    "tooltip-format": "{player}: {title}\n{artist} — {album}"
+    "tooltip": true
   },
 
   "clock": {
