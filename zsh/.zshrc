@@ -197,11 +197,11 @@ function update() {
 # ------------------------------------------------------------
 # CORE ALIASES — DWM & Dotfiles
 # ------------------------------------------------------------
+alias nvimconf= 'z nvim && nvim .'
 alias recomp='cd ~/suckless-meta/dwm && rm -rf config.h && sudo make clean install'
 alias dwmconf='nvim ~/suckless-meta/dwm/config.def.h'
 alias niriconf='nvim ~/.config/niri/config.kdl'
 alias xconf='nvim ~/dotfiles/scripts/start_dwm.sh'
-alias nvimconf= 'z nvim && nvim .'
 
 # ------------------------------------------------------------
 # CORE ALIASES — Neovim
@@ -209,6 +209,7 @@ alias nvimconf= 'z nvim && nvim .'
 alias vi='nvim .'
 alias vrc='nvim ~/.zshrc'
 alias vdots='cd ~/dotfiles && nvim .'
+alias waybartheme='~/.config/waybar/scripts/theme.sh'
 
 # ------------------------------------------------------------
 # CORE ALIASES — Git

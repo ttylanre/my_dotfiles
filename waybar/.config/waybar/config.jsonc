@@ -8,7 +8,7 @@
   "margin-right": 8,
 
   "modules-left": ["custom/launcher", "niri/workspaces", "custom/cava"],
-  "modules-center": ["clock"],
+  "modules-center": ["clock", "custom/weather"],
   "modules-right": ["mpris", "group/hw", "group/stats", "tray", "group/session"],
 
   "custom/launcher": {
@@ -73,6 +73,17 @@
     "actions": { "on-scroll-up": "shift_up", "on-scroll-down": "shift_down" }
   },
 
+  // weather beside the clock (Open-Meteo; edit coordinates in scripts/weather.sh)
+  "custom/weather": {
+    "exec": "~/.config/waybar/scripts/weather.sh",
+    "return-type": "json",
+    "interval": 1200,
+    "signal": 8,
+    "hide-empty-text": true,
+    "on-click": "pkill -RTMIN+8 waybar",
+    "tooltip": true
+  },
+
   // ── one combined pill for hardware stuff ──
   "group/hw": {
     "orientation": "horizontal",
@@ -135,12 +146,12 @@
     "tooltip-format-ethernet": "{ifname} · {ipaddr}\n↑ {bandwidthUpBytes}  ↓ {bandwidthDownBytes}",
     "tooltip-format-disconnected": "No network connection",
     "tooltip-format-disabled": "Network disabled",
-    "on-click": "kitty --class tui-overlay -e nmtui-dark",
+    "on-click": "kitty -e nmtui",
     "menu": "on-click-right",
     "menu-file": "~/.config/waybar/context/network.xml",
     "menu-actions": {
       "action-1": "bash -c '[[ $(nmcli radio wifi) == enabled ]] && nmcli radio wifi off || nmcli radio wifi on'",
-      "action-2": "kitty --class tui-overlay -e nmtui-dark",
+      "action-2": "kitty -e nmtui",
       "action-3": "nm-connection-editor"
     }
   },

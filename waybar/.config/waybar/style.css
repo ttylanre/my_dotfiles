@@ -22,6 +22,7 @@ window#waybar {
 #workspaces,
 #custom-cava,
 #clock,
+#custom-weather,
 #hw,
 #stats,
 #session,
@@ -348,4 +349,28 @@ tooltip label {
 window#waybar.empty #window {
   background: transparent;
   border: none;
+}
+
+/* ── weather (beside the clock) ─────────────── */
+#custom-weather {
+  padding: 0 14px;
+  color: @subtext;
+}
+#custom-weather.clear      { color: @yellow; }
+#custom-weather.clear.night { color: @lavender; }
+#custom-weather.cloud      { color: @subtext; }
+#custom-weather.rain       { color: @blue; }
+#custom-weather.storm      { color: @mauve; }
+#custom-weather.fog        { color: @overlay; }
+#custom-weather.snow       { color: @sky; }
+#custom-weather.rain-likely {
+  border-color: alpha(@blue, 0.45);
+}
+#custom-weather.stale      { opacity: 0.6; }
+#custom-weather.offline {
+  background: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
 }
