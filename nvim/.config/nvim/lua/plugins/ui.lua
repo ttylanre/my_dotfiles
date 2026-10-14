@@ -45,7 +45,7 @@ return {
 	},
 
 	-- Bufferline
-	--[[ {
+	{
 		"romgrk/barbar.nvim",
 		event = "BufReadPre",
 		init = function()
@@ -54,7 +54,7 @@ return {
 		config = function()
 			require("plugins.config.barbar")
 		end,
-	}, ]]
+	},
 
 	-- 	Interactive breadcrumb/navigation bar
 	{

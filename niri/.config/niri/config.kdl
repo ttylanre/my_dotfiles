@@ -528,6 +528,7 @@ binds {
     Mod+Ctrl+W { spawn "sh" "-c" "NEWT_COLORS=$(tr '\n' ' ' < ~/.config/nmtui/theme) kitty --class tui-overlay -e nmtui"; }
     Mod+Ctrl+T { spawn "kitty" "--class" "tui-overlay" "-e" "btop"; }
     Mod+Ctrl+D { spawn "kitty" "--class" "tui-overlay" "-e" "lazydocker"; }
+    Mod+Ctrl+N { spawn "swaync-client" "-t" "-sw"; }
 
 
     // ─────────────────────────────────────────────────────────────────
@@ -662,14 +663,22 @@ binds {
     // ─────────────────────────────────────────────────────────────────
 
     // Media & Brightness Keys
-    XF86AudioRaiseVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
-    XF86AudioLowerVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
-    XF86AudioMute        { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-    XF86MonBrightnessUp  { spawn "brightnessctl" "set" "+5%"; }
-    XF86MonBrightnessDown { spawn "brightnessctl" "set" "5%-"; }
-    XF86AudioPlay        { spawn "playerctl" "play-pause"; }
-    XF86AudioNext        { spawn "playerctl" "next"; }
-    XF86AudioPrev        { spawn "playerctl" "previous"; }
+    //XF86AudioRaiseVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+    //XF86AudioLowerVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+    //XF86AudioMute        { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    //XF86MonBrightnessUp  { spawn "brightnessctl" "set" "+5%"; }
+    //XF86MonBrightnessDown { spawn "brightnessctl" "set" "5%-"; }
+    //XF86AudioPlay        { spawn "playerctl" "play-pause"; }
+    //XF86AudioNext        { spawn "playerctl" "next"; }
+    //XF86AudioPrev        { spawn "playerctl" "previous"; }
+	XF86AudioRaiseVolume { spawn "swayosd-client" "--output-volume" "raise"; }
+    XF86AudioLowerVolume { spawn "swayosd-client" "--output-volume" "lower"; }
+    XF86AudioMute        { spawn "swayosd-client" "--output-volume" "mute-toggle"; }
+    XF86MonBrightnessUp  { spawn "swayosd-client" "--brightness" "raise"; }
+    XF86MonBrightnessDown  { spawn "swayosd-client" "--brightness" "lower"; }
+    XF86AudioPlay        { spawn "swayosd-client" "--playerctl" "play-pause"; }
+    XF86AudioNext        { spawn "swayosd-client" "--playerctl" "next"; }
+    XF86AudioPrev        { spawn "swayosd-client" "--playerctl" "previous"; }
 
     // Screenshots
     Print      { screenshot; }
@@ -685,6 +694,7 @@ binds {
 spawn-at-startup "waybar"
 //spawn-at-startup "mako"
 spawn-at-startup "swaync"
+spawn-at-startup "swayosd-server"
 spawn-at-startup "udiskie" "--smart-tray"
 spawn-at-startup "niri-screen-time" "-daemon"
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
