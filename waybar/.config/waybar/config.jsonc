@@ -145,12 +145,12 @@
     "tooltip-format-ethernet": "{ifname} · {ipaddr}\n↑ {bandwidthUpBytes}  ↓ {bandwidthDownBytes}",
     "tooltip-format-disconnected": "No network connection",
     "tooltip-format-disabled": "Network disabled",
-    "on-click": "kitty -e nmtui",
+    "on-click": "kitty --class tui-overlay -e nmtui-dark",
     "menu": "on-click-right",
     "menu-file": "~/.config/waybar/context/network.xml",
     "menu-actions": {
       "action-1": "bash -c '[[ $(nmcli radio wifi) == enabled ]] && nmcli radio wifi off || nmcli radio wifi on'",
-      "action-2": "kitty -e nmtui",
+      "action-2": "kitty --class tui-overlay -e nmtui-dark",
       "action-3": "nm-connection-editor"
     }
   },
