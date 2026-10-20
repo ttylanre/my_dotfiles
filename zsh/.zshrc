@@ -316,7 +316,11 @@ if [[ -x "$(command -v fzf)" ]]; then
 	fi
 fi
 
-
+export FZF_DEFAULT_OPTS=" \
+--color=bg:#1e1e2e,bg+:#313244,fg:#cdd6f4,fg+:#cdd6f4 \
+--color=hl:#b4befe,hl+:#b4befe,info:#cba6f7,prompt:#94e2d5 \
+--color=pointer:#b4befe,marker:#a6e3a1,spinner:#cba6f7 \
+--color=header:#89b4fa,border:#585b70,gutter:#1e1e2e"
 
 
 # ------------------------------------------------------------

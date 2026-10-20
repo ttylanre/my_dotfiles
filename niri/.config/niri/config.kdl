@@ -1,9 +1,15 @@
-// ── Input ──────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
+//  niri config — Catppuccin Mocha rice
+//  Rule order matters: in window-rule / layer-rule, LATER rules override
+//  EARLIER ones, so general rules come first and specific ones last.
+// ════════════════════════════════════════════════════════════════════════════
+
+// ── Input ───────────────────────────────────────────────────────────────────
 input {
     keyboard {
         xkb {
             layout "us"
-            // options "caps:escape"   // uncomment to remap Caps to Escape
+            // options "caps:escape"   // uncomment to remap Caps → Escape
         }
         repeat-delay 300
         repeat-rate 50
@@ -11,59 +17,81 @@ input {
 
     touchpad {
         tap
+        dwt                          // disable while typing
         natural-scroll
         accel-speed 0.2
+        click-method "clickfinger"
     }
 
     mouse {
         accel-speed 0.0
     }
 
+    // focus-follows-mouse max-scroll-amount="0%"   // optional: sloppy focus
+    // warp-mouse-to-focus
+
     disable-power-key-handling
 }
 
-// ── Outputs ────────────────────────────────────────────────────────────────
-/*output "eDP-1" {
-    scale 1.0
-    mode "1920x1080@60.0"
+cursor {
+    hide-when-typing
+    hide-after-inactive-ms 4000
 }
 
-output "HDMI-A-1" {
-    scale 1.0
-}*/
+// ── Outputs ─────────────────────────────────────────────────────────────────
+// Left: laptop panel. Right: external HDMI display.
+// output "eDP-1" {
+//     mode "1366x768@60.000"
+//     position x=0 y=0
+//     scale 1.0
+// }
+//
+// output "HDMI-A-1" {
+//     mode "1920x1080@60.000"
+//     position x=1366 y=0
+//     scale 1.3
+// }
+
+// top: external HDMI display. bottom-center: laptop panel.
 output "HDMI-A-1" {
     mode "1920x1080@60.000"
-    position x=1366 y=0
+    position x=0 y=0
     scale 1.3
-}
-
-output "PNP(CTV) CultraviewTV 0x01010101" {
-    // alternate way to match — niri accepts either the connector name
-    // (HDMI-A-1) or the make/model string, connector name is simpler
 }
 
 output "eDP-1" {
     mode "1366x768@60.000"
-    position x=0 y=0
+    position x=55 y=831
     scale 1.0
 }
-/*output "eDP-1" {
-		off
-}*/
 
-// ── Layout ─────────────────────────────────────────────────────────────────
+// To turn the laptop panel off when docked:
+// output "eDP-1" { off; }
+
+// ── General ─────────────────────────────────────────────────────────────────
 prefer-no-csd
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
+hotkey-overlay {
+    skip-at-startup
+}
+
+// X11 apps go through an external xwayland-satellite on :1
+// (niri's built-in integration is disabled below).
 environment {
-    Display ":1"
-    _JAVA_AWT_WM_NONREPARENTING ":1"
+    DISPLAY ":1"
+    _JAVA_AWT_WM_NONREPARENTING "1"
     AWT_TOOLKIT "MToolkit"
 }
 
+xwayland-satellite {
+    off
+}
+
+// ── Layout ──────────────────────────────────────────────────────────────────
 layout {
-    gaps 6
+    gaps 8
     center-focused-column "never"
 
     preset-column-widths {
@@ -73,25 +101,64 @@ layout {
         proportion 1.0
     }
 
+    preset-window-heights {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+        proportion 1.0
+    }
+
     default-column-width { proportion 0.5; }
 
-focus-ring {
-    width 2
-    active-gradient from="#89b4fa" to="#cba6f7" angle=45 relative-to="workspace-view"
-    inactive-color "#313244"
-}
+    focus-ring {
+        width 2
+        active-gradient from="#89b4fa" to="#cba6f7" angle=45 relative-to="workspace-view"
+        inactive-color "#313244"
+        urgent-color "#f38ba8"
+    }
 
     border {
         off
     }
+
+    // Soft shadows on every window: the focused one gets a faint blue glow
+    // (Catppuccin blue), unfocused ones a plain dark shadow.
+    shadow {
+        on
+        softness 40
+        spread 4
+        offset x=0 y=6
+        color "#89b4fa30"
+        inactive-color "#00000050"
+    }
+
+    // Used by tabbed columns (Mod+Alt+T)
+    tab-indicator {
+        hide-when-single-tab
+        place-within-column
+        width 4
+        gap 4
+        corner-radius 4
+        active-color "#89b4fa"
+        inactive-color "#313244"
+        urgent-color "#f38ba8"
+    }
 }
 
-// ── Animations ─────────────────────────────────────────────────────────────
+// ── Animations ──────────────────────────────────────────────────────────────
 animations {
     // off
+    // slowdown 3.0
+    slowdown 2.0
+
+    // Windows pop in with a fast expo ease and fade out quickly
+    window-open {
+        duration-ms 220
+        curve "ease-out-expo"
+    }
 
     window-close {
-        duration-ms 120
+        duration-ms 150
         curve "ease-out-quad"
     }
 
@@ -100,38 +167,60 @@ animations {
         curve "ease-out-quad"
     }
 
+    // Springs: lower damping-ratio = bouncier, higher stiffness = snappier.
+    // Panning between columns / workspaces: quick with a slight overshoot
     workspace-switch {
-        spring damping-ratio=0.8 stiffness=320 epsilon=0.001
-    }
-
-    config-notification-open-close {
-        spring damping-ratio=0.8 stiffness=320 epsilon=0.001
-    }
-
-    overview-open-close {
-        spring damping-ratio=0.72 stiffness=400 epsilon=0.0005
+        spring damping-ratio=0.75 stiffness=550 epsilon=0.0001
     }
 
     horizontal-view-movement {
-        spring damping-ratio=0.8 stiffness=320 epsilon=0.001
+        spring damping-ratio=0.82 stiffness=600 epsilon=0.0001
+    }
+
+    // Windows sliding around feel a little springy
+    window-movement {
+        spring damping-ratio=0.7 stiffness=500 epsilon=0.0001
     }
 
     window-resize {
-        spring damping-ratio=0.8 stiffness=320 epsilon=0.001
+        spring damping-ratio=0.85 stiffness=500 epsilon=0.0001
     }
 
-    window-open {
-        spring damping-ratio=0.8 stiffness=320 epsilon=0.001
+    config-notification-open-close {
+        spring damping-ratio=0.65 stiffness=700 epsilon=0.001
     }
 
-    window-movement {
-        spring damping-ratio=0.8 stiffness=320 epsilon=0.001
+    overview-open-close {
+        spring damping-ratio=0.72 stiffness=450 epsilon=0.0005
     }
-
-    // slowdown 3.0
 }
 
-// ── Layer Rules ────────────────────────────────────────────────────────────
+// ── Overview ────────────────────────────────────────────────────────────────
+overview {
+    // Dark frosted backdrop — matches waybar
+    backdrop-color "#11111bcc"
+
+    workspace-shadow {
+        on
+        softness 40
+        spread 5
+        offset x=0 y=8
+        color "#00000066"
+    }
+}
+
+// ── Workspaces ──────────────────────────────────────────────────────────────
+// Nerd Font glyphs written as escapes so they can't get lost in copy/paste:
+//   f120 = terminal, f0ac = globe, f121 = code
+// Make sure these match your waybar workspace config / format-icons.
+workspace "\u{f120}"
+workspace "\u{f0ac}"
+workspace "\u{f121}"
+
+// Pin workspaces to a monitor (optional):
+// workspace "\u{f0ac}" { open-on-output "HDMI-A-1"; }
+
+// ── Layer Rules ─────────────────────────────────────────────────────────────
 layer-rule {
     match namespace="waybar"
     opacity 0.8
@@ -148,7 +237,6 @@ layer-rule {
 
 layer-rule {
     match namespace="swaync-control-center"
-    match namespace="syshud"
     background-effect {
         xray false
         blur true
@@ -181,38 +269,22 @@ layer-rule {
     }
 }
 
+// Second awww instance (named "overview-wall") draws the wallpaper behind the overview
 layer-rule {
     match namespace="^awww-daemonoverview-wall$"
     place-within-backdrop true
 }
 
-// ── Overview ───────────────────────────────────────────────────────────────
-overview {
-    // Dark frosted backdrop — matches your waybar bg
-    backdrop-color "#11111bcc"
+// ── Window Rules ────────────────────────────────────────────────────────────
 
-    workspace-shadow {
-        on
-        softness 40
-        spread 5
-        offset x=0 y=8
-        color "#00000066"
-    }
-}
-// ── Workspaces ─────────────────────────────────────────────────────────────
-workspace " "
-workspace " "
-workspace " "
-
-// ── Window Rules ───────────────────────────────────────────────────────────
-// Global defaults
+// ·· Global defaults ··
 window-rule {
     draw-border-with-background false
-    geometry-corner-radius 9
+    geometry-corner-radius 12
     clip-to-geometry true
 }
 
-// Standardized sizing and floating rules for TUI overlays
+// ·· Floating TUI overlays (Mod+Ctrl+… launchers) ··
 window-rule {
     match app-id=r#"^tui-overlay$"#
     open-floating true
@@ -224,33 +296,32 @@ window-rule {
     }
 }
 
-// Scratchpad window rule
+// ·· Scratchpad terminal (Mod+S) ··
 window-rule {
     match app-id=r#"^scratchpad$"#
     open-floating true
     default-column-width { fixed 1000; }
     default-window-height { fixed 600; }
+    opacity 0.92
+    background-effect {
+        blur true
+    }
 }
 
+// ·· Wallpaper picker ··
 window-rule {
     match app-id="wallpaper-picker"
-
     open-floating true
-
-    // Dimensions for the floating window
     default-column-width { fixed 1000; }
     default-window-height { fixed 650; }
-
-    // Centered positioning with optional offsets (default centers automatically)
-    // default-floating-position x=0 y=0
 }
 
-// Blur effects for common apps
+// ·· Blur for GTK/utility apps ··
 window-rule {
-    match app-id=r#"^org.gnome.Nautilus$"#
-    match app-id=r#"^org.gnome.Papers$"#
-    match app-id=r#"^org.gnome.Loupe$"#
-    match app-id=r#"^io.github.celluloid_player.Celluloid$"#
+    match app-id=r#"^org\.gnome\.Nautilus$"#
+    match app-id=r#"^org\.gnome\.Papers$"#
+    match app-id=r#"^org\.gnome\.Loupe$"#
+    match app-id=r#"^io\.github\.celluloid_player\.Celluloid$"#
     match app-id=r#"^zenity$"#
     background-effect {
         xray false
@@ -258,38 +329,32 @@ window-rule {
     }
 }
 
-// Floating dialogs & tools
+// ·· Always-floating dialogs & small tools ··
 window-rule {
     match app-id=r#"^org\.kde\.kdeconnect\.daemon$"#
+    match app-id=r#"^org\.kde\.kdeconnect\.handler$"#
     match app-id=r#"^galculator$"#
-    match app-id=r#"^org.kde.kdeconnect.handler$"#
-    match app-id=r#"^thunar$"# title="^Rename*"
+    match app-id=r#"^org\.kde\.kcalc$"#
+    match app-id=r#"^org\.gnome\.Calendar$"#
+    match app-id=r#"^org\.gnome\.Loupe$"#
+    match app-id=r#"^zenity$"#
+    match app-id=r#"^Tk$"#
+    match app-id=r#"^[Jj]ava$"#
     match app-id=r#"^Vivado$"# title="^win0$"
-    match app-id=r#"^java$"#
+    match app-id=r#"^Vivado 2022\.2 Installer$"#
     match app-id=r#"^Eclipse$"# title="^Eclipse IDE Launcher $"
     match app-id=r#"^STM32CubeIDE$"# title="^STM32CubeIDE Launcher $"
     match app-id=r#"^com-st-microxplorer-maingui-STM32CubeMX$"# title="^win0$"
-    match app-id=r#"^Java$"#
-    match app-id=r#"^zenity$"#
-    match app-id=r#"^org.kde.kcalc$"#
-    match app-id=r#"^Vivado 2022.2 Installer$"#
-    match app-id=r#"^org.gnome.Calendar$"#
-    match app-id=r#"^Tk$"#
-    match app-id=r#"^org.gnome.Loupe$"#
     open-floating true
 }
 
-window-rule {
-    match app-id=r#"^thunar$"# title="^File Operation Progress$"
-    baba-is-float true
-    open-floating true
-}
-
-// File managers — constrained floating size
+// ·· File managers — constrained floating size + translucency ··
+// (Rename / progress dialogs are excluded so they keep their natural size)
 window-rule {
     match app-id=r#"^thunar$"#
-    match app-id=r#"^org.gnome.Nautilus$"#
+    match app-id=r#"^org\.gnome\.Nautilus$"#
     match app-id=r#"^pcmanfm$"#
+    exclude app-id=r#"^thunar$"# title="^(File Operation Progress|Rename)"
     min-width 800
     max-width 1176
     min-height 600
@@ -297,37 +362,9 @@ window-rule {
     open-floating true
 }
 
-// File upload dialogs
 window-rule {
-    match app-id=r#"^.*$"# title="^File Upload*"
-    match app-id=r#"^.*$"# title="^Select Folder to Upload*"
-    min-width 800
-    max-width 1176
-    min-height 900
-    max-height 900
-    open-floating true
-}
-
-// Privacy / screen capture exclusions
-window-rule {
-    match app-id="polkit-gnome-authentication-agent-1"
-    match app-id="Bitwarden"
-    block-out-from "screen-capture"
-}
-
-// Picture-in-picture
-window-rule {
-    match app-id=r#"zen$"# title="^Picture-in-Picture$"
-    match app-id=r#"librewolf$"# title="^Picture-in-Picture$"
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    open-floating true
-}
-
-// PCManFM — translucent with blur
-window-rule {
-    match app-id=r#"^pcmanfm$"#
     match app-id=r#"^thunar$"#
-    //open-on-workspace " "
+    match app-id=r#"^pcmanfm$"#
     opacity 0.72
     background-effect {
         xray true
@@ -335,19 +372,53 @@ window-rule {
     }
 }
 
-// Workspace 1 — Terminal
+// Thunar small dialogs
+window-rule {
+    match app-id=r#"^thunar$"# title="^(File Operation Progress|Rename)"
+    open-floating true
+}
+
+// Because why not (niri easter egg)
+window-rule {
+    match app-id=r#"^thunar$"# title="^File Operation Progress$"
+    baba-is-float true
+}
+
+// ·· File chooser dialogs from any app ··
+// NOTE: heights were 900, which is taller than both of your screens
+// (768 and ~831 logical px), so they were being clipped. Adjusted.
+window-rule {
+    match title="^File Upload"
+    match title="^Create New Folder"
+    match title="^Select Folder to Upload"
+    min-width 800
+    max-width 1176
+    min-height 500
+    max-height 650
+    open-floating true
+}
+
+// ·· Privacy: hide from screen capture / screen share ··
+window-rule {
+    match app-id="polkit-gnome-authentication-agent-1"
+    match app-id=r#"^Bitwarden$"#
+    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+    block-out-from "screen-capture"
+}
+
+// ·· Workspace  (terminal) ··
 window-rule {
     match app-id=r#"^kitty$"#
-    open-on-workspace " "
-    opacity 0.88
+    open-on-workspace "\u{f120}"
+    open-maximized true
+    opacity 0.8
     background-effect {
         xray true
         blur true
     }
-    default-column-width { proportion 0.5; }
 }
 
-// Workspace 2 — Browsers
+// ·· Workspace  (browsers) ··
 window-rule {
     match app-id=r#"zen$"#
     match app-id=r#"vivaldi-stable$"#
@@ -356,91 +427,96 @@ window-rule {
     match app-id=r#"librewolf$"#
     match app-id=r#"google-chrome$"#
     match app-id=r#"firefox$"#
+    open-on-workspace "\u{f0ac}"
+    open-focused true
+    default-column-width { proportion 0.9; }
     opacity 0.92
     background-effect {
         blur true
     }
-    open-on-workspace " "
-    open-focused true
-    default-column-width { proportion 0.9; }
-    // open-maximized-to-edges true
 }
 
-// Workspace 3 — Editors & IDEs
+window-rule {
+    match app-id="firefox"
+    default-column-width { proportion 0.66667; }
+}
+
+// Picture-in-picture: small, floating, bottom-right, fully opaque.
+// (Placed AFTER the browser rule so it overrides width/opacity/workspace.)
+window-rule {
+    match app-id=r#"zen$"# title="^Picture-in-Picture$"
+    match app-id=r#"librewolf$"# title="^Picture-in-Picture$"
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+    open-focused false
+    opacity 1.0
+    default-column-width { fixed 480; }
+    default-window-height { fixed 270; }
+    default-floating-position x=24 y=24 relative-to="bottom-right"
+}
+
+// ·· Workspace  (editors & IDEs) ··
 window-rule {
     match app-id=r#"^neovide$"#
-    match app-id=r#"^dev.zed.Zed$"#
+    match app-id=r#"^dev\.zed\.Zed$"#
     match app-id=r#"^jetbrains-idea$"#
     match app-id=r#"^codium$"#
-    match app-id=r#"^Vivado$"# title="^Vivado 2022.2$"
+    match app-id=r#"^Vivado$"# title=r#"^Vivado 2022\.2$"#
     match app-id=r#"^Vitis IDE$"#
-    match app-id=r#"^uv4.exe"#
+    match app-id=r#"^uv4\.exe"#
     match app-id=r#"^Eclipse$"#
-    match app-id=r#"^STM32CubeIDE$"# title="^*STM32CubeIDE $"
+    match app-id=r#"^STM32CubeIDE$"# title=r#"STM32CubeIDE $"#
     match app-id=r#"^labwc$"#
-    match app-id=r#"^kitty$"# title=r#"^\[nvim\]$"#
     match app-id=r#"^gvim$"#
-    //open-on-workspace "3"
+    match app-id=r#"^kitty$"# title=r#"^\[nvim\]$"#
+    open-on-workspace "\u{f121}"   // enable to pin editors to the code workspace
     open-focused true
     open-maximized true
 }
 
 window-rule {
     match app-id=r#"^codium$"#
-    match app-id=r#"^dev.zed.Zed$"#
+    match app-id=r#"^dev\.zed\.Zed$"#
+    opacity 0.9
     background-effect {
         blur true
     }
-    opacity 0.9
 }
 
-// Workspace 4 — Documents, media, misc
+// ·· Documents, media, misc ··
 window-rule {
-    match app-id=r#"org.pwmt.zathura"#
-    match app-id=r#"com.github.johnfactotum.Foliate"#
-    match app-id=r#"^org.gnome.Papers$"#
-    //open-on-workspace "4"
+    match app-id=r#"org\.pwmt\.zathura"#
+    match app-id=r#"com\.github\.johnfactotum\.Foliate"#
+    match app-id=r#"^org\.gnome\.Papers$"#
     open-focused true
     default-column-width { proportion 0.75; }
 }
 
 window-rule {
-    match app-id=r#"^com.obsproject.Studio$"#
+    match app-id=r#"^com\.obsproject\.Studio$"#
     match app-id=r#"^vesktop$"#
-    match app-id=r#"^org.gnome.Snapshot$"#
-    //open-on-workspace "4"
+    match app-id=r#"^org\.gnome\.Snapshot$"#
     open-focused true
 }
 
+// OBS gets a comfortable starting width instead of an over-narrow column
+window-rule {
+    match app-id=r#"^com\.obsproject\.Studio$"#
+    default-column-width { proportion 0.5; }
+}
+
+// VMs & office suites
 window-rule {
     match app-id=r#"^virt-manager$"# title=r#"^.*QEMU/KVM$"#
     match app-id=r#"^libreoffice.*$"#
     match app-id=r#"^soffice$"#
-    //open-on-workspace "4"
     open-focused true
     open-maximized true
 }
 
-// Prevent OBS control window from getting auto-tiled too narrow
+// ·· QtScrcpy ··
 window-rule {
-    match app-id=r#"^com\.obsproject\.Studio$"#
-
-    // Give OBS a comfortable starting width on the ribbon
-    default-column-width { proportion 0.5; }
-}
-
-// OPTIONAL: Prevent specific sensitive apps from showing up in OBS screen capture
-window-rule {
-    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
-    match app-id=r#"^Bitwarden$"#
-
-    // OBS will record a black box for this window
-    block-out-from "screen-capture"
-}
-
-// QtScrcpy
-window-rule {
-    match app-id=r#"QtScrcpy$"# title="^Phone-+"
+    match app-id=r#"QtScrcpy$"# title="^Phone-"
     default-column-width { proportion 0.25; }
 }
 
@@ -450,91 +526,58 @@ window-rule {
     default-column-width {}
 }
 
-// Hotkey overlay
-hotkey-overlay {
-    skip-at-startup
-}
-
-// Firefox column width override
-window-rule {
-    match app-id="firefox"
-    default-column-width { proportion 0.66667; }
-}
-
-// Shadows on floating windows
-window-rule {
-    match is-floating=true
-    shadow { on; }
-}
-
-// Kitty — borderless, maximized
-window-rule {
-    match app-id=r#"^kitty$"#
-    draw-border-with-background false
-    open-maximized true
-}
-
-// ── Keybindings ────────────────────────────────────────────────────────────
+// ── Keybindings ─────────────────────────────────────────────────────────────
 binds {
-    // ─────────────────────────────────────────────────────────────────
-    // ── LAUNCHERS & APPLICATIONS ─────────────────────────────────────
-    // ─────────────────────────────────────────────────────────────────
-
+    // ────────────────────────────────────────────────────────────────────────
+    // ── LAUNCHERS & APPLICATIONS ────────────────────────────────────────────
+    // ────────────────────────────────────────────────────────────────────────
     Mod+Slash hotkey-overlay-title="Keybindings" {
         spawn "kitty" "--class" "tui-overlay" "-e" "niri-keybinds"
     }
 
     Mod+Return { spawn "default-terminal"; }
+    Mod+Alt+Return { spawn "default-terminal" "-e" "tmux" "new-session" "-A" "-s" "main"; }
 
-    Mod+Alt+Return {
-        spawn "default-terminal" "-e" "tmux" "new-session" "-A" "-s" "main"
-    }
-
-    // Scratchpad Terminal
-    Mod+S {
-        spawn "kitty" "--class" "scratchpad" "-e" "tmux" "new-session" "-A" "-s" "scratchpad"
-    }
+    // Scratchpad terminal
+    Mod+S { spawn "kitty" "--class" "scratchpad" "-e" "tmux" "new-session" "-A" "-s" "scratchpad"; }
 
     Mod+B { spawn "default-browser"; }
     Mod+Shift+Alt+B hotkey-overlay-title="Open Private Browser" { spawn "default-browser-private"; }
 
     Mod+E { spawn "default-fm"; }
     Mod+C { spawn "default-editor"; }
-    Mod+Shift+S { spawn "bash" "-lc" "exec kitty nvim \"$HOME/.config/niri/config.kdl\""; }
+    Mod+Shift+S hotkey-overlay-title="Edit niri config" { spawn-sh "kitty nvim ~/.config/niri/config.kdl"; }
 
-    Mod+D { spawn "bash" "-c" "pkill fuzzel || fuzzel"; }
-    Mod+Comma hotkey-overlay-title="Show Emojis" repeat=false { spawn "bash" "-c" "pkill fuzzel || fuzzel-emoji"; }
+    Mod+D { spawn-sh "pkill fuzzel || fuzzel"; }
+    Mod+Comma hotkey-overlay-title="Show Emojis" repeat=false { spawn-sh "pkill fuzzel || fuzzel-emoji"; }
 
     Mod+V { spawn "cliphist-picker"; }
     Mod+W repeat=false { spawn "kitty" "--class" "tui-overlay" "-e" "bash" "-lc" "exec \"$HOME/.local/bin/wallpaper-picker.sh\""; }
     Mod+Alt+W hotkey-overlay-title="Random Wallpaper" { spawn "random-wallpaper"; }
 
-    // Cycle night light state (Off -> 4500K -> 3500K -> 2700K)
+    // Cycle night light (Off → 4500K → 3500K → 2700K)
     Mod+N { spawn "nightlight-cycle"; }
 
-    // ─────────────────────────────────────────────────────────────────
-    // ── SYSTEM & OVERLAYS ────────────────────────────────────────────
-    // ─────────────────────────────────────────────────────────────────
-
+    // ── SYSTEM & OVERLAYS ───────────────────────────────────────────────────
     Mod+Shift+B hotkey-overlay-title="Toggle Waybar" repeat=false { spawn "toggle-waybar"; }
     Mod+O hotkey-overlay-title="Toggle Overview" repeat=false { toggle-overview; }
     Mod+Alt+L { spawn "swaylock"; }
     Mod+Shift+Q { spawn "way-powermenu"; }
+    Mod+Shift+P { power-off-monitors; }
 
-    // System Management TUIs
+    // Handy for VMs / remote desktops: let apps grab all shortcuts
+    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+
+    // System-management TUIs
     Mod+Ctrl+P { spawn "kitty" "--class" "tui-overlay" "-e" "pkg-manage"; }
     Mod+Ctrl+A { spawn "kitty" "--class" "tui-overlay" "-e" "wiremix"; }
     Mod+Ctrl+B { spawn "kitty" "--class" "tui-overlay" "-e" "bluetui"; }
-    Mod+Ctrl+W { spawn "sh" "-c" "NEWT_COLORS=$(tr '\n' ' ' < ~/.config/nmtui/theme) kitty --class tui-overlay -e nmtui"; }
+    Mod+Ctrl+W { spawn-sh "NEWT_COLORS=$(tr '\\n' ' ' < ~/.config/nmtui/theme) kitty --class tui-overlay -e nmtui"; }
     Mod+Ctrl+T { spawn "kitty" "--class" "tui-overlay" "-e" "btop"; }
     Mod+Ctrl+D { spawn "kitty" "--class" "tui-overlay" "-e" "lazydocker"; }
     Mod+Ctrl+N { spawn "swaync-client" "-t" "-sw"; }
 
-
-    // ─────────────────────────────────────────────────────────────────
-    // ── WINDOW MANAGEMENT & CLOSING ──────────────────────────────────
-    // ─────────────────────────────────────────────────────────────────
-
+    // ── WINDOW MANAGEMENT & CLOSING ─────────────────────────────────────────
     Mod+Q { close-window; }
 
     Mod+Ctrl+Shift+Delete hotkey-overlay-title="Kill all windows (Global)" {
@@ -553,12 +596,7 @@ binds {
         spawn "sh" "-c" "niri msg --json windows | jq -r '(.[] | select(.is_focused == true) | .workspace_id) as $ws | .[] | select(.workspace_id == $ws) | .id' | xargs -r -I {} niri msg action close-window --id {}"
     }
 
-
-    // ─────────────────────────────────────────────────────────────────
-    // ── NAVIGATION & FOCUS ───────────────────────────────────────────
-    // ─────────────────────────────────────────────────────────────────
-
-    // Vim-style & Arrow Focus
+    // ── NAVIGATION & FOCUS ──────────────────────────────────────────────────
     Mod+H     { focus-column-left; }
     Mod+L     { focus-column-right; }
     Mod+J     { focus-window-down; }
@@ -571,7 +609,7 @@ binds {
     Mod+Home  { focus-column-first; }
     Mod+End   { focus-column-last; }
 
-    // Move Windows / Columns
+    // Move windows / columns
     Mod+Shift+H     { move-column-left; }
     Mod+Shift+L     { move-column-right; }
     Mod+Shift+J     { move-window-down-or-to-workspace-down; }
@@ -584,7 +622,7 @@ binds {
     Mod+Ctrl+Home   { move-column-to-first; }
     Mod+Ctrl+End    { move-column-to-last; }
 
-    // Monitor Focus & Movement
+    // Monitor focus
     Mod+Ctrl+H     { focus-monitor-left; }
     Mod+Ctrl+J     { focus-monitor-down; }
     Mod+Ctrl+K     { focus-monitor-up; }
@@ -594,6 +632,7 @@ binds {
     Mod+Ctrl+Up    { focus-monitor-up; }
     Mod+Ctrl+Right { focus-monitor-right; }
 
+    // Move column to another monitor
     Mod+Shift+Ctrl+H     { move-column-to-monitor-left; }
     Mod+Shift+Ctrl+J     { move-column-to-monitor-down; }
     Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
@@ -603,36 +642,33 @@ binds {
     Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
     Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
 
-
-    // ─────────────────────────────────────────────────────────────────
-    // ── SIZING, LAYOUT & FLOATING ────────────────────────────────────
-    // ─────────────────────────────────────────────────────────────────
-
+    // ── SIZING, LAYOUT & FLOATING ───────────────────────────────────────────
     Mod+Minus       { set-column-width "-10%"; }
     Mod+Equal       { set-column-width "+10%"; }
     Mod+Shift+Minus { set-window-height "-10%"; }
     Mod+Shift+Equal { set-window-height "+10%"; }
     Mod+0           { set-column-width "100%"; }
     Mod+R           { switch-preset-column-width; }
+    Mod+Shift+R     { switch-preset-window-height; }
+    Mod+Ctrl+R      { reset-window-height; }
 
     Mod+F           { maximize-window-to-edges; }
     Mod+Shift+F     { fullscreen-window; }
     Mod+Alt+F       { maximize-column; }
+    Mod+Ctrl+F      { expand-column-to-available-width; }
+    Mod+Ctrl+C      { center-column; }
 
     Mod+Shift+Space { toggle-window-floating; }
     Mod+Space       { switch-focus-between-floating-and-tiling; }
 
-    // Column Consuming / Expelling
-    Mod+G           { consume-window-into-column; }
-    Mod+Alt+G       { expel-window-from-column; }
-    Mod+Bracketleft { consume-or-expel-window-left; }
+    // Column consuming / expelling / tabs
+    Mod+G            { consume-window-into-column; }
+    Mod+Alt+G        { expel-window-from-column; }
+    Mod+Bracketleft  { consume-or-expel-window-left; }
     Mod+Bracketright { consume-or-expel-window-right; }
+    Mod+Alt+T        { toggle-column-tabbed-display; }
 
-
-    // ─────────────────────────────────────────────────────────────────
-    // ── WORKSPACES ───────────────────────────────────────────────────
-    // ─────────────────────────────────────────────────────────────────
-
+    // ── WORKSPACES ──────────────────────────────────────────────────────────
     Mod+1 { focus-workspace 1; }
     Mod+2 { focus-workspace 2; }
     Mod+3 { focus-workspace 3; }
@@ -657,56 +693,77 @@ binds {
     Mod+Shift+Tab { focus-workspace-up; }
     Mod+Grave     { focus-workspace-previous; }
 
+    Mod+Alt+J { move-workspace-down; }
+    Mod+Alt+K { move-workspace-up; }
 
-    // ─────────────────────────────────────────────────────────────────
-    // ── HARDWARE & UTILITIES ─────────────────────────────────────────
-    // ─────────────────────────────────────────────────────────────────
+    // ── MOUSE WHEEL ─────────────────────────────────────────────────────────
+    Mod+WheelScrollDown       cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp         cooldown-ms=150 { focus-workspace-up; }
+    Mod+Ctrl+WheelScrollDown  cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+Ctrl+WheelScrollUp    cooldown-ms=150 { move-column-to-workspace-up; }
 
-    // Media & Brightness Keys
-    //XF86AudioRaiseVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
-    //XF86AudioLowerVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
-    //XF86AudioMute        { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-    //XF86MonBrightnessUp  { spawn "brightnessctl" "set" "+5%"; }
-    //XF86MonBrightnessDown { spawn "brightnessctl" "set" "5%-"; }
-    //XF86AudioPlay        { spawn "playerctl" "play-pause"; }
-    //XF86AudioNext        { spawn "playerctl" "next"; }
-    //XF86AudioPrev        { spawn "playerctl" "previous"; }
-	XF86AudioRaiseVolume { spawn "swayosd-client" "--output-volume" "raise"; }
-    XF86AudioLowerVolume { spawn "swayosd-client" "--output-volume" "lower"; }
-    XF86AudioMute        { spawn "swayosd-client" "--output-volume" "mute-toggle"; }
-    XF86MonBrightnessUp  { spawn "swayosd-client" "--brightness" "raise"; }
-    XF86MonBrightnessDown  { spawn "swayosd-client" "--brightness" "lower"; }
-    XF86AudioPlay        { spawn "swayosd-client" "--playerctl" "play-pause"; }
-    XF86AudioNext        { spawn "swayosd-client" "--playerctl" "next"; }
-    XF86AudioPrev        { spawn "swayosd-client" "--playerctl" "previous"; }
+    Mod+Shift+WheelScrollDown { focus-column-right; }
+    Mod+Shift+WheelScrollUp   { focus-column-left; }
+    Mod+WheelScrollRight      { focus-column-right; }
+    Mod+WheelScrollLeft       { focus-column-left; }
 
-    // Screenshots
+    // ── HARDWARE (SwayOSD) ──────────────────────────────────────────────────
+    // allow-when-locked lets these keep working on the lock screen
+    XF86AudioRaiseVolume   allow-when-locked=true { spawn "swayosd-client" "--output-volume" "raise"; }
+    XF86AudioLowerVolume   allow-when-locked=true { spawn "swayosd-client" "--output-volume" "lower"; }
+    XF86AudioMute          allow-when-locked=true { spawn "swayosd-client" "--output-volume" "mute-toggle"; }
+    XF86MonBrightnessUp    allow-when-locked=true { spawn "swayosd-client" "--brightness" "raise"; }
+    XF86MonBrightnessDown  allow-when-locked=true { spawn "swayosd-client" "--brightness" "lower"; }
+    XF86AudioPlay          allow-when-locked=true { spawn "swayosd-client" "--playerctl" "play-pause"; }
+    XF86AudioNext          allow-when-locked=true { spawn "swayosd-client" "--playerctl" "next"; }
+    XF86AudioPrev          allow-when-locked=true { spawn "swayosd-client" "--playerctl" "previous"; }
+
+    // Plain wpctl / brightnessctl alternative (no OSD):
+    // XF86AudioRaiseVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+    // XF86AudioLowerVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+    // XF86AudioMute        { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    // XF86MonBrightnessUp  { spawn "brightnessctl" "set" "+5%"; }
+    // XF86MonBrightnessDown { spawn "brightnessctl" "set" "5%-"; }
+
+    // ── SCREENSHOTS & TOOLS ─────────────────────────────────────────────────
     Print      { screenshot; }
     Ctrl+Print { screenshot-screen; }
     Alt+Print  { screenshot-window; }
 
-    // Tools
-    Mod+Print hotkey-overlay-title="Color Picker" { spawn "bash" "-c" "hyprpicker -a || colorpicker"; }
-    Mod+P repeat=false { spawn-sh "wl-mirror $(niri msg --json focused-output | jq -r .name)"; }
+    Mod+Print hotkey-overlay-title="Color Picker" { spawn-sh "hyprpicker -a || colorpicker"; }
+    Mod+P repeat=false hotkey-overlay-title="Mirror focused output" { spawn-sh "wl-mirror $(niri msg --json focused-output | jq -r .name)"; }
 }
 
-// ── Autostart ──────────────────────────────────────────────────────────────
-spawn-at-startup "waybar"
-//spawn-at-startup "mako"
-spawn-at-startup "swaync"
-spawn-at-startup "swayosd-server"
-spawn-at-startup "udiskie" "--smart-tray"
-spawn-at-startup "niri-screen-time" "-daemon"
+// ── Autostart ───────────────────────────────────────────────────────────────
+// Environment first, so everything below sees WAYLAND_DISPLAY etc.
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP" "NIRI_SOCKET"
+
+// Portals
+spawn-at-startup "/usr/lib/xdg-desktop-portal-gnome"   // or xdg-desktop-portal-gtk
+spawn-at-startup "/usr/lib/xdg-desktop-portal"
+
+// Auth
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+
+// Wallpaper (second instance renders behind the overview)
 spawn-at-startup "awww-daemon"
 spawn-at-startup "awww-daemon" "-n" "overview-wall"
+
+// Shell UI
+spawn-at-startup "waybar"
+spawn-at-startup "swaync"                              // swap for "mako" if preferred
+spawn-at-startup "swayosd-server"
+spawn-at-startup "udiskie" "--smart-tray"
+
+// Clipboard history
 spawn-at-startup "wl-paste" "--type" "text"  "--watch" "cliphist" "store"
 spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
-spawn-at-startup "wname" "LG4D"
-spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP" "NIRI_SOCKET"
-spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
-spawn-at-startup "/usr/lib/xdg-desktop-portal-gnome" // Or xdg-desktop-portal-gtk
-spawn-at-startup "/usr/lib/xdg-desktop-portal"
-xwayland-satellite {
-		off
-}
+
+// Misc
+spawn-at-startup "niri-screen-time" "-daemon"
+spawn-at-startup "wname" "LG4D"                        // Java-app compositor-name hack
+
+// If you want niri-managed X11 apps again, delete the `xwayland-satellite { off }`
+// block above and the DISPLAY line in `environment`; niri will spawn it on demand.
+// Otherwise start your own on :1, e.g.:
+// spawn-at-startup "xwayland-satellite" ":1"
