@@ -19,7 +19,9 @@
 
   "niri/workspaces": {
     "format": "{name}",
-    "on-click": "activate"
+    "on-click": "activate",
+    "on-scroll-up": "niri msg action focus-workspace-up",
+    "on-scroll-down": "niri msg action focus-workspace-down"
   },
 
   // ── audio visualiser (script-based, works on any waybar build) ──
