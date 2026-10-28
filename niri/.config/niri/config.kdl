@@ -86,7 +86,7 @@ environment {
 }
 
 xwayland-satellite {
-    off
+    on
 }
 
 // ── Layout ──────────────────────────────────────────────────────────────────
@@ -221,14 +221,14 @@ workspace "\u{f121}"
 // workspace "\u{f0ac}" { open-on-output "HDMI-A-1"; }
 
 // ── Layer Rules ─────────────────────────────────────────────────────────────
-layer-rule {
-    match namespace="waybar"
-    opacity 0.8
-    background-effect {
-        xray true
-        blur true
-    }
-}
+//layer-rule {
+//    match namespace="waybar"
+//    opacity 0.8
+//    background-effect {
+//        xray true
+//        blur true
+//    }
+//}
 
 layer-rule {
     match namespace="swaync-notification-window"
@@ -426,7 +426,7 @@ window-rule {
     match app-id=r#"qutebrowser$"#
     match app-id=r#"librewolf$"#
     match app-id=r#"google-chrome$"#
-    match app-id=r#"firefox$"#
+    match app-id=r#"^firefox$"#
     open-on-workspace "\u{f0ac}"
     open-focused true
     default-column-width { proportion 0.9; }
@@ -573,7 +573,7 @@ binds {
     Mod+Ctrl+A { spawn "kitty" "--class" "tui-overlay" "-e" "wiremix"; }
     Mod+Ctrl+B { spawn "kitty" "--class" "tui-overlay" "-e" "bluetui"; }
     Mod+Ctrl+W { spawn-sh "NEWT_COLORS=$(tr '\\n' ' ' < ~/.config/nmtui/theme) kitty --class tui-overlay -e nmtui"; }
-    Mod+Ctrl+T { spawn "kitty" "--class" "tui-overlay" "-e" "btop"; }
+    Mod+Ctrl+S { spawn "kitty" "--class" "tui-overlay" "-e" "btop"; }
     Mod+Ctrl+D { spawn "kitty" "--class" "tui-overlay" "-e" "lazydocker"; }
     Mod+Ctrl+N { spawn "swaync-client" "-t" "-sw"; }
 
