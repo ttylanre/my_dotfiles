@@ -6,9 +6,9 @@
 #    --pos 1366x0
 
 xrandr \
-    --output eDP-1 --mode 1366x768 --pos 0x0 \
-    --output HDMI-1 --mode 1920x1080 \
-    --pos 1366x0
+	--output eDP-1 --mode 1366x768 --pos 0x0 \
+	--output HDMI-1 --mode 1920x1080 \
+	--pos 1366x0
 # Start the Polkit agent for those EOS apps
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 
@@ -26,11 +26,11 @@ export XDG_CURRENT_DESKTOP=dwm
 export XDG_SESSION_DESKTOP=dwm
 export XDG_SESSION_TYPE=x11
 # key repeat
- xset r rate 200 50 &
+xset r rate 200 50 &
 # Start the compositor
 picom --config ~/.config/picom/picom.conf &
 
-# bar, popup notifications, clipboard manager, auto mounting disk 
+# bar, popup notifications, clipboard manager, auto mounting disk
 slstatus &
 dunst &
 clipmenud &
@@ -38,7 +38,7 @@ udiskie &
 
 # Start the wallpaper
 # feh --bg-fill /home/lanre/Pictures/wallpapers/monster-energy-anime_1.webp
-feh --bg-fill /home/lanre/Pictures/wallpapers/ilya_kuvshinov_07.png # Set the wallpaper 
+feh --bg-fill /home/lanre/Pictures/wallpapers/"12. Catppuccin Mocha.jpg" # Set the wallpaper
 #while true; do
 #feh --bg-fill "$(find ~/Pictures/wallpapers -type f | shuf -n 1)"
 #    sleep 3m
