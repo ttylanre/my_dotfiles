@@ -110,8 +110,9 @@ command -v fzf >/dev/null 2>&1 && source <(fzf --zsh)
 alias c='clear'
 alias q='exit'
 alias v='nvim'
-alias vi='nvim'
+alias vi='nvim .'
 alias nvim2="NVIM_APPNAME=nvim2 nvim"
+alias y='yazi'
 if command -v termux-open >/dev/null 2>&1; then
     alias open='termux-open'
 elif command -v xdg-open >/dev/null 2>&1; then
@@ -197,19 +198,20 @@ function update() {
 # ------------------------------------------------------------
 # CORE ALIASES — DWM & Dotfiles
 # ------------------------------------------------------------
-alias nvimconf= 'z nvim && nvim .'
-alias recomp='cd ~/suckless-meta/dwm && rm -rf config.h && sudo make clean install'
-alias dwmconf='nvim ~/suckless-meta/dwm/config.def.h'
-alias niriconf='nvim ~/.config/niri/config.kdl'
-alias xconf='nvim ~/dotfiles/scripts/start_dwm.sh'
-
-# ------------------------------------------------------------
-# CORE ALIASES — Neovim
-# ------------------------------------------------------------
-alias vi='nvim .'
 alias vrc='nvim ~/.zshrc'
 alias vdots='cd ~/dotfiles && nvim .'
+alias nvimconf= 'z nvim && nvim .'
+alias tmuxconf='nvim ~/.tmux.conf'
+alias picomconf='nvim ~/.config/picom/picom.conf'
+alias waybarconf='nvim ~/.config/waybar/ && nvim .'
+alias xconf='nvim ~/.local/bin/start_dwm.sh'
+alias niriconf='nvim ~/.config/niri/config.kdl'
+alias warbarconf='nvim ~/.config/waybar/ && nvim .'
+alias starshipconf='nvim ~/.config/starship.toml'
+alias kittyconf='nvim ~/.config/kitty/kitty.conf'
 alias waybartheme='~/.config/waybar/scripts/theme.sh'
+alias dwmconf='nvim ~/suckless-meta/dwm/config.def.h'
+alias recomp='cd ~/suckless-meta/dwm && rm -rf config.h && sudo make clean install'
 
 # ------------------------------------------------------------
 # CORE ALIASES — Git
