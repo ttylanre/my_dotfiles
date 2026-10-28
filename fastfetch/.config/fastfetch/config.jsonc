@@ -1,130 +1,45 @@
 {
-  "$schema": "https://github.com/fastfetch-cli/raw/main/doc/json_schema.json",
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
     "source": "$(fd -e png -e jpg -e jpeg -e webp . \"${XDG_CONFIG_HOME:-$HOME/.config}/fastfetch/images\" | shuf -n 1)",
     "type": "kitty",
-    "height": 18,
-    "padding": {
-      "top": 2
-    }
+    "height": 21,
+    "padding": { "top": 1, "right": 4 }
   },
   "display": {
-    "separator": " "
+    "separator": " » ",
+    "key": { "width": 15 },
+    "color": { "keys": "magenta", "separator": "white" }
   },
   "modules": [
-    {
-      "type": "custom",
-      "format": "\u001b[90m  \u001b[31m  \u001b[32m  \u001b[33m  \u001b[34m  \u001b[35m  \u001b[36m  \u001b[37m"
-    },
     "break",
-    {
-      "type": "title",
-      "keyWidth": 10
-    },
+    { "type": "custom", "format": "\u001b[35m \uf2db \u001b[0m➤ System Specs" },
+    { "type": "custom", "format": "┌──────────────────────────────────────────────┐" },
+    { "type": "host",    "key": "\uf108  Host" },
+    { "type": "display", "key": "\uf108  Display" },
+    { "type": "cpu",     "key": "\uf2db  CPU",    "format": "{1}" },
+    { "type": "gpu",     "key": "\uf1b2  GPU",    "format": "{2}" },
+    { "type": "memory",  "key": "\uf1c0  Memory" },
+    { "type": "disk",    "key": "\uf0a0  Disk", "folders": "/" },
+    { "type": "custom",  "format": "└──────────────────────────────────────────────┘" },
     "break",
-    // --- SYSTEM INFO ---
-    {
-      "type": "os",
-      "key": "{icon}",
-	  //"key": " ",
-      "keyColor": "34"
-    },
-    {
-      "type": "kernel",
-      "key": " ",
-      "keyColor": "34"
-    },
-    {
-      "type": "uptime",
-      "key": " ",
-      "keyColor": "34"
-    },
-    {
-      "type": "packages",
-      "key": " ",
-      "keyColor": "34"
-    },
+    { "type": "custom", "format": "\u001b[35m \uf121 \u001b[0m➤ Software Specs" },
+    { "type": "custom", "format": "┌──────────────────────────────────────────────┐" },
+    { "type": "os",       "key": "\uf303  OS" },
+    { "type": "kernel",   "key": "\uf17c  Kernel" },
+    { "type": "wm",       "key": "\uf2d0  WM" },
+    { "type": "packages", "key": "\uf187  Package" },
+    { "type": "uptime",   "key": "\uf017  Uptime" },
+    //{ "type": "disk",     "key": "\uf073  OS Age", "format": "{create-time:10}", "folders": "/" },
+	{ "type": "command", "key": "\uf073 OS Age", "text": "echo $(( ( $(date +%s) - $(date -d \"$(head -1 /var/log/pacman.log | cut -d'[' -f2 | cut -d']' -f1)\" +%s) ) / 86400 )) days" },
+    { "type": "custom", "format": "└──────────────────────────────────────────────┘" },
     "break",
-    // --- ENVIRONMENT ---
-    {
-      "type": "de",
-      "key": "󰖲 ",
-      "keyColor": "34"
-    },
-    {
-      "type": "wm",
-      "key": " ",
-      "keyColor": "34"
-    },
-    {
-      "type": "shell",
-      "key": " ",
-      "keyColor": "34"
-    },
-    {
-      "type": "terminal",
-      "key": " ",
-      "keyColor": "34"
-    },
-    {
-      "type": "display",
-      "key": " ",
-      "keyColor": "34"
-    },
+    { "type": "custom", "format": "\u001b[35m \uDB80\uDEA0 \u001b[0m➤ Personal Stats" },
+    { "type": "custom", "format": "┌──────────────────────────────────────────────┐" },
+    { "type": "command", "key": "\uf26c  Anilist", "text": "~/.config/fastfetch/scripts/anilist.sh" },
+    { "type": "command", "key": "\uf09b  Github",  "text": "~/.config/fastfetch/scripts/github.sh" },
+    { "type": "custom", "format": "└──────────────────────────────────────────────┘" },
     "break",
-    // --- HARDWARE ---
-    {
-      "type": "cpu",
-      "format": "{1}",
-      "key": " ",
-      "keyColor": "34"
-    },
-    {
-      "type": "gpu",
-      "format": "{2}",
-      "key": " ",
-      "keyColor": "34"
-    },
-    {
-      "type": "memory",
-      "format": "{1} / {2} ({3})",
-      "key": " ",
-      "keyColor": "34"
-    },
-    {
-      "type": "swap",
-      "format": "{1} / {2} ({3})",
-      "key": "󰾴 ",
-      "keyColor": "34"
-    },
-    {
-      "type": "disk",
-      "format": "{1} / {2} ({3}) ({9})",
-      "key": " ",
-      "keyColor": "34"
-    },
-    {
-      "type": "battery",
-      "key": "󰁹 ",
-      "keyColor": "34"
-    },
-    "break",
-    // --- NETWORK ---
-    {
-      "type": "localip",
-      "key": "󰩟 ",
-      "keyColor": "34"
-    },
-    {
-      "type": "publicip",
-      "key": "󰩠 ",
-      "keyColor": "34"
-    },
-    "break",
-    {
-      "type": "custom",
-      "format": "\u001b[90m  \u001b[31m  \u001b[32m  \u001b[33m  \u001b[34m  \u001b[35m  \u001b[36m  \u001b[37m"
-    },
-    "break"
+    { "type": "colors", "symbol": "diamond", "paddingLeft": 2 }
   ]
 }
