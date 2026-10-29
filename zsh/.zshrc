@@ -417,7 +417,19 @@ fi
 # ------------------------------------------------------------
 # STARTUP
 # ------------------------------------------------------------
-fastfetch
+# Check if Termux environment exists and the ff script is available
+if [ -d "$PREFIX/com.termux" ] && [ -x "$HOME/.local/bin/ff" ]; then
+    alias fastfetch="ff"
+fi
+
+# Run custom ff in Termux if available, otherwise run standard fastfetch on startup
+if [[ -n "$PREFIX" && "$PREFIX" == *"com.termux"* ]] && [[ $- == *i* ]]; then
+    if command -v ff &>/dev/null; then
+        ff
+    else
+        fastfetch
+    fi
+fi
 
 #Import colorscheme from 'wal' asynchronously
 # (cat ~/.cache/wal/sequences &)

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# 1. Pick a random image from your images folder
+IMAGE=$(find "$HOME/.config/fastfetch/images" -type f \( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.webp" \) | shuf -n 1)
+
+# 2. Render the image at the top using chafa (adjust size with -s COLSxROWS if needed)
+if [ -f "$IMAGE" ]; then
+    chafa -s 30 "$IMAGE"
+    echo "" # Add a blank line separator
+fi
+
+# 3. Run fastfetch in pure text-only mode (logo disabled to avoid crashes)
+fastfetch --logo none

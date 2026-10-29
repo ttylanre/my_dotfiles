@@ -28,6 +28,7 @@
     conflictStyle = zdiff3
 
 [pull]
+	rebase = false
 	# rebase = true
 
 [push]
