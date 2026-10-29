@@ -16,14 +16,20 @@
         <property name="label">Log out</property>
       </object>
     </child>
-    <child><object class="GtkSeparatorMenuItem" id="separator"/></child>
+    <child><object class="GtkSeparatorMenuItem" id="separator-1"/></child>
     <child>
       <object class="GtkMenuItem" id="action-4">
+        <property name="label">Restart Waybar</property>
+      </object>
+    </child>
+    <child><object class="GtkSeparatorMenuItem" id="separator-2"/></child>
+    <child>
+      <object class="GtkMenuItem" id="action-5">
         <property name="label">Reboot</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="action-5">
+      <object class="GtkMenuItem" id="action-6">
         <property name="label">Shutdown</property>
       </object>
     </child>
