@@ -61,17 +61,33 @@
     "interval": 1,
     "format": "{:%a %d %b  %H:%M}",
     "format-alt": "{:%A, %d %B %Y  ·  %H:%M:%S}",
-    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    // calendar card: big weekday + date, month grid, week/day-of-year footer.
+    // colours here are Catppuccin Mocha hex (Pango markup can't read colors.css)
+    "tooltip-format": "<span size='large' weight='bold' color='#cba6f7'>{0:%A}</span>  <span color='#a6adc8'>{0:%d %B %Y}</span>\n\n<tt>{calendar}</tt>\n<span size='small' color='#6c7086'>Week {0:%V}  ·  Day {0:%j}</span>",
     "calendar": {
       "mode": "month",
+      "mode-mon-col": 3,
+      "weeks-pos": "left",
       "on-scroll": 1,
       "format": {
-        "months": "<span color='#cba6f7'><b>{}</b></span>",
-        "weekdays": "<span color='#6c7086'>{}</span>",
-        "today": "<span color='#89b4fa'><b><u>{}</u></b></span>"
+        "months":   "<span color='#cba6f7'><b>{}</b></span>",
+        "weeks":    "<span color='#585b70'><small>{}</small></span>",
+        "weekdays": "<span color='#89b4fa'><b>{}</b></span>",
+        "days":     "<span color='#cdd6f4'>{}</span>",
+        "today":    "<span color='#11111b' bgcolor='#89b4fa'><b>{}</b></span>"
       }
     },
-    "actions": { "on-scroll-up": "shift_up", "on-scroll-down": "shift_down" }
+    // touchpads send many tiny scroll events per swipe; only act once the movement
+    // adds up to this much (raise it if months still fly past, lower it if it feels stiff)
+    "smooth-scrolling-threshold": 3,
+
+    // scroll = change month, right-click = month/year view, middle-click = back to today
+    "actions": {
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down",
+      "on-click-right": "mode",
+      "on-click-middle": "shift_reset"
+    }
   },
 
   // weather beside the clock (Open-Meteo; edit coordinates in scripts/weather.sh)
@@ -241,8 +257,9 @@
       "action-1": "~/.config/waybar/scripts/lock.sh",
       "action-2": "systemctl suspend",
       "action-3": "niri msg action quit",
-      "action-4": "systemctl reboot",
-      "action-5": "systemctl poweroff"
+      "action-4": "setsid -f bash -c 'pkill -x waybar; sleep 0.5; exec waybar > /dev/null 2>&1'",
+      "action-5": "systemctl reboot",
+      "action-6": "systemctl poweroff"
     }
   },
 
