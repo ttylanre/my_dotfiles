@@ -178,6 +178,7 @@ window#waybar {
 #pulseaudio,
 #backlight,
 #network,
+#custom-powerprofile,
 #battery {
   background: transparent;
   padding: 0 10px;
@@ -187,13 +188,15 @@ window#waybar {
 /* icon-only modules share one fixed width so nothing shifts between states */
 #pulseaudio,
 #backlight,
-#network {
+#network,
+#custom-powerprofile {
   min-width: 20px;
   font-size: 15px;
 }
 
 #brightness,
 #network,
+#custom-powerprofile,
 #battery {
   border-left: 1px solid alpha(@overlay, 0.35);
 }
@@ -208,13 +211,38 @@ window#waybar {
 
 #battery.warning:not(.charging) { color: @yellow; }
 
-#battery.critical:not(.charging) {
-  color: @red;
-  animation: blink 1s step-start infinite;
+/* charging: a slow, gentle breathing pulse */
+#battery.charging:not(.full) {
+  animation: breathe 2.4s ease-in-out infinite alternate;
 }
 
-@keyframes blink {
-  50% { opacity: 0.4; }
+@keyframes breathe {
+  from { opacity: 1; }
+  to   { opacity: 0.55; }
+}
+
+/* 15% or less and unplugged: solid red chip that pulses hard */
+#battery.critical:not(.charging) {
+  color: @crust;
+  background: @red;
+  border-radius: 10px;
+  margin: 3px 2px;
+  animation: alert 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes alert {
+  from { opacity: 1; }
+  to   { opacity: 0.45; }
+}
+
+/* power profile colour follows the mode */
+#custom-powerprofile.performance { color: @red; }
+#custom-powerprofile.balanced    { color: @blue; }
+#custom-powerprofile.power-saver { color: @green; }
+#custom-powerprofile.offline {
+  min-width: 0;
+  padding: 0;
+  border: none;
 }
 
 /* sliders that slide out on hover (knob hidden, thin bar) */

@@ -6,44 +6,111 @@
   "control-center-layer": "top",
   "layer-shell": true,
   "cssPriority": "user",
-
   "control-center-width": 400,
   "control-center-height": 640,
   "control-center-margin-top": 8,
   "control-center-margin-bottom": 8,
   "control-center-margin-right": 8,
   "control-center-margin-left": 0,
-
   "notification-window-width": 400,
   "notification-icon-size": 48,
   "notification-body-image-height": 120,
   "notification-body-image-width": 240,
   "image-visibility": "when-available",
-
   "timeout": 6,
   "timeout-low": 3,
   "timeout-critical": 0,
   "transition-time": 200,
-
   "fit-to-screen": false,
   "keyboard-shortcuts": true,
   "hide-on-clear": true,
   "hide-on-action": true,
   "script-fail-notify": true,
-
-  "widgets": ["title", "dnd", "mpris", "notifications"],
+  "widgets": [
+    "title",
+    "buttons-grid",
+    "volume",
+    "backlight",
+    "mpris",
+    "notifications"
+  ],
   "widget-config": {
     "title": {
       "text": "Notifications",
       "clear-all-button": true,
       "button-text": "Clear all"
     },
-    "dnd": {
-      "text": "Do Not Disturb"
-    },
     "mpris": {
       "image-size": 64,
       "image-radius": 12
+    },
+    "buttons-grid": {
+      "actions": [
+        {
+          "label": "\udb81\udda9",
+          "type": "toggle",
+          "active": true,
+          "command": "sh -c 'if [ \"$SWAYNC_TOGGLE_STATE\" = true ]; then nmcli radio wifi on; else nmcli radio wifi off; fi'",
+          "update_command": "sh -c '[ \"$(nmcli radio wifi)\" = enabled ] && echo true || echo false'"
+        },
+        {
+          "label": "\udb80\udcaf",
+          "type": "toggle",
+          "active": true,
+          "command": "sh -c 'if [ \"$SWAYNC_TOGGLE_STATE\" = true ]; then bluetoothctl power on; else bluetoothctl power off; fi'",
+          "update_command": "sh -c 'bluetoothctl show | grep -q \"Powered: yes\" && echo true || echo false'"
+        },
+        {
+          "label": "\udb80\udc1d",
+          "type": "toggle",
+          "active": false,
+          "command": "sh -c 'if [ \"$SWAYNC_TOGGLE_STATE\" = true ]; then rfkill block all; else rfkill unblock all; fi'",
+          "update_command": "sh -c 'rfkill -n -o SOFT list | grep -q \"^unblocked\" && echo false || echo true'"
+        },
+        {
+          "label": "\udb80\udc9b",
+          "type": "toggle",
+          "active": false,
+          "command": "sh -c 'if [ \"$SWAYNC_TOGGLE_STATE\" = true ]; then swaync-client -dn; else swaync-client -df; fi'",
+          "update_command": "swaync-client -D"
+        },
+        {
+          "label": "\udb80\udf6d",
+          "type": "toggle",
+          "active": false,
+          "command": "sh -c 'if [ \"$SWAYNC_TOGGLE_STATE\" = true ]; then wpctl set-mute @DEFAULT_AUDIO_SOURCE@ 1; else wpctl set-mute @DEFAULT_AUDIO_SOURCE@ 0; fi'",
+          "update_command": "sh -c 'wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | grep -q MUTED && echo true || echo false'"
+        },
+        {
+          "label": "\udb81\udd94",
+          "type": "toggle",
+          "active": false,
+          "command": "sh -c 'if [ \"$SWAYNC_TOGGLE_STATE\" = true ]; then $HOME/.config/waybar/scripts/nightlight.sh on; else $HOME/.config/waybar/scripts/nightlight.sh off; fi'",
+          "update_command": "sh -c '$HOME/.config/waybar/scripts/nightlight.sh status'"
+        },
+        {
+          "label": "\udb83\udf85",
+          "command": "sh -c '$HOME/.config/waybar/scripts/powerprofile.sh next'"
+        },
+        {
+          "label": "\udb80\udd00",
+          "command": "sh -c 'sleep 0.4; niri msg action screenshot'"
+        },
+        {
+          "label": "\udb80\udf3e",
+          "command": "sh -c '$HOME/.config/waybar/scripts/lock.sh'"
+        }
+      ]
+    },
+    "volume": {
+      "label": "\udb81\udd7e",
+      "show-per-app": false
+    },
+    "backlight": {
+      "label": "\udb80\udcdf",
+      "device": "intel_backlight",
+      "subsystem": "backlight",
+      "min": 5
     }
   }
 }

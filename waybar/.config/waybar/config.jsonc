@@ -104,7 +104,7 @@
   // ── one combined pill for hardware stuff ──
   "group/hw": {
     "orientation": "horizontal",
-    "modules": ["group/volume", "group/brightness", "network", "battery"]
+    "modules": ["group/volume", "group/brightness", "network", "custom/powerprofile", "battery"]
   },
 
   // icon only; hover it and a slider slides out
@@ -163,7 +163,7 @@
     "tooltip-format-ethernet": "{ifname} · {ipaddr}\n↑ {bandwidthUpBytes}  ↓ {bandwidthDownBytes}",
     "tooltip-format-disconnected": "No network connection",
     "tooltip-format-disabled": "Network disabled",
-    "on-click": "kitty --class tui-overlay -e nmtui-dark",
+    "on-click": "pkill nmtui || kitty --class tui-overlay -e nmtui-dark",
     "menu": "on-click-right",
     "menu-file": "~/.config/waybar/context/network.xml",
     "menu-actions": {
@@ -171,6 +171,18 @@
       "action-2": "kitty --class tui-overlay -e nmtui-dark",
       "action-3": "nm-connection-editor"
     }
+  },
+
+  // power profile (power-profiles-daemon): click cycles, right-click = balanced
+  "custom/powerprofile": {
+    "exec": "~/.config/waybar/scripts/powerprofile.sh",
+    "return-type": "json",
+    "interval": 30,
+    "signal": 9,
+    "hide-empty-text": true,
+    "on-click": "~/.config/waybar/scripts/powerprofile.sh next",
+    "on-click-right": "~/.config/waybar/scripts/powerprofile.sh balanced",
+    "tooltip": true
   },
 
   "battery": {

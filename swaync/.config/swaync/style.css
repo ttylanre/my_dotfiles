@@ -8,6 +8,18 @@
 }
 
 /* ── popup notifications + list rows ────────── */
+
+/* GTK list rows carry a default grey hover/selected background; remove it */
+row,
+row:hover,
+row:selected,
+row:focus,
+row:active {
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+}
+
 .notification-row {
   outline: none;
   background: transparent;
@@ -19,6 +31,7 @@
 }
 
 .notification-background {
+  box-shadow: none;
   background: alpha(@mantle, 0.95);
   border: 1px solid alpha(@lavender, 0.18);
   border-radius: 14px;
@@ -31,6 +44,7 @@
 }
 
 .notification {
+  box-shadow: none;
   background: transparent;
   border: none;
   border-radius: 14px;
@@ -57,6 +71,7 @@
 .time {
   color: @overlay;
   font-size: 11px;
+  margin-left: 10px;
   margin-right: 8px;
 }
 
@@ -91,18 +106,28 @@
   color: @crust;
 }
 
-/* action buttons on a notification */
+/* action buttons on a notification: plain text, highlight on hover.
+   Wrapper nodes are made transparent so only one layer is visible. */
+.notification-alt-actions,
+.notification-actions {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0 6px 6px 6px;
+}
+
 .notification-action {
-  background: alpha(@surface, 0.8);
+  background: transparent;
   color: @text;
   border: none;
-  border-radius: 10px;
-  margin: 4px 8px 8px 8px;
-  padding: 4px 10px;
+  box-shadow: none;
+  border-radius: 8px;
+  margin: 0;
+  padding: 8px 10px;
 }
 
 .notification-action:hover {
-  background: alpha(@blue, 0.25);
+  background: alpha(@blue, 0.2);
   color: @blue;
 }
 
@@ -128,9 +153,9 @@
 
 /* title row + clear button */
 .widget-title {
-  margin: 10px 12px 4px 12px;
+  margin: 8px 10px 2px 10px;
   color: @text;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
 }
 
@@ -168,6 +193,110 @@
 .widget-dnd > switch slider {
   background: @text;
   border-radius: 12px;
+}
+
+/* quick-action buttons (wifi, bluetooth, dnd, screenshot, lock) */
+.widget-buttons-grid {
+  margin: 4px 10px;
+  padding: 0;
+  background: transparent;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild {
+  background: transparent;
+  border-radius: 10px;
+  outline: none;
+  box-shadow: none;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild:hover,
+.widget-buttons-grid > flowbox > flowboxchild:focus,
+.widget-buttons-grid > flowbox > flowboxchild:selected {
+  background: transparent;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button {
+  background: alpha(@surface, 0.7);
+  color: @subtext;
+  border: none;
+  border-radius: 10px;
+  min-width: 32px;
+  min-height: 32px;
+  margin: 2px;
+  padding: 0;
+  font-size: 15px;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button:hover {
+  background: alpha(@blue, 0.2);
+  color: @blue;
+}
+
+/* toggled on */
+.widget-buttons-grid > flowbox > flowboxchild > button:checked {
+  background: linear-gradient(135deg, @blue, @mauve);
+  color: @crust;
+}
+
+/* volume + brightness sliders */
+.widget-volume,
+.widget-backlight {
+  margin: 2px 14px;
+  padding: 4px 10px;
+  background: alpha(@surface, 0.5);
+  border-radius: 12px;
+  color: @text;
+}
+
+.widget-volume label,
+.widget-backlight label {
+  font-size: 14px;
+  color: @subtext;
+  margin-right: 10px;
+}
+
+.widget-volume trough,
+.widget-backlight trough {
+  min-height: 6px;
+  border-radius: 6px;
+  background: alpha(@overlay, 0.4);
+}
+
+.widget-volume trough highlight,
+.widget-backlight trough highlight {
+  border-radius: 6px;
+  background-image: none;
+  background-color: @lavender;
+}
+
+.widget-volume slider,
+.widget-backlight slider {
+  min-width: 14px;
+  min-height: 14px;
+  margin: -5px;
+  border: none;
+  border-radius: 100%;
+  background: @text;
+  box-shadow: none;
+}
+
+.widget-volume button,
+.widget-backlight button {
+  background: transparent;
+  color: @subtext;
+  border: none;
+  border-radius: 8px;
+}
+
+.widget-volume button:hover,
+.widget-backlight button:hover {
+  background: alpha(@blue, 0.2);
+  color: @blue;
+}
+
+.per-app-volume {
+  margin-top: 6px;
+  color: @subtext;
 }
 
 /* media player widget */
