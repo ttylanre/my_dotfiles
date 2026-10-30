@@ -418,16 +418,33 @@ fi
 # STARTUP
 # ------------------------------------------------------------
 # Check if Termux environment exists and the ff script is available
-if [ -d "$PREFIX/com.termux" ] && [ -x "$HOME/.local/bin/ff" ]; then
-    alias fastfetch="ff"
-fi
+#if [ -d "$PREFIX/com.termux" ] && [ -x "$HOME/.local/bin/ff" ]; then
+#    alias fastfetch="ff"
+#fi
 
 # Run custom ff in Termux if available, otherwise run standard fastfetch on startup
-if [[ -n "$PREFIX" && "$PREFIX" == *"com.termux"* ]] && [[ $- == *i* ]]; then
-    if command -v ff &>/dev/null; then
-        ff
+#if [[ -n "$PREFIX" && "$PREFIX" == *"com.termux"* ]] && [[ $- == *i* ]]; then
+#    if command -v ff &>/dev/null; then
+#        ff
+#    else
+#        fastfetch
+#    fi
+#fi
+
+# Terminal startup hook
+if [[ $- == *i* ]]; then
+    if [[ -n "$PREFIX" && "$PREFIX" == *"com.termux"* ]]; then
+        # On Termux: run custom ff script if available, else fastfetch
+        if command -v ff &>/dev/null; then
+            ff
+        else
+            fastfetch
+        fi
     else
-        fastfetch
+        # On Arch / Desktop: run standard fastfetch directly
+        if command -v fastfetch &>/dev/null; then
+            fastfetch
+        fi
     fi
 fi
 
