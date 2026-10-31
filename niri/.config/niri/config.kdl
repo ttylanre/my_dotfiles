@@ -235,13 +235,13 @@ layer-rule {
     block-out-from "screen-capture"
 }
 
-layer-rule {
-    match namespace="swaync-control-center"
-    background-effect {
-        xray false
-        blur true
-    }
-}
+//layer-rule {
+//    match namespace="swaync-control-center"
+//    background-effect {
+//        xray false
+//        blur true
+//    }
+//}
 
 layer-rule {
     match namespace="syshud"

@@ -4,42 +4,178 @@
     "source": "$(fd -e png -e jpg -e jpeg -e webp . \"${XDG_CONFIG_HOME:-$HOME/.config}/fastfetch/images\" | shuf -n 1)",
     "type": "kitty",
     "height": 21,
-    "padding": { "top": 1, "right": 4 }
+    "padding": {
+      "top": 1,
+      "right": 4
+    }
   },
   "display": {
-    "separator": " » ",
-    "key": { "width": 15 },
-    "color": { "keys": "magenta", "separator": "white" }
+    "separator": " \uf105 ",
+    "key": {
+      "width": 19
+    },
+    "color": {
+      "separator": "38;2;108;112;134"
+    },
+    "percent": {
+      "type": 7
+    }
   },
   "modules": [
     "break",
-    { "type": "custom", "format": "\u001b[35m \uf2db \u001b[0m➤ System Specs" },
-    { "type": "custom", "format": "┌──────────────────────────────────────────────┐" },
-    { "type": "host",    "key": "\uf108  Host" },
-    { "type": "display", "key": "\uf108  Display" },
-    { "type": "cpu",     "key": "\uf2db  CPU",    "format": "{1}" },
-    { "type": "gpu",     "key": "\uf1b2  GPU",    "format": "{2}" },
-    { "type": "memory",  "key": "\uf1c0  Memory" },
-    { "type": "disk",    "key": "\uf0a0  Disk", "folders": "/" },
-    { "type": "custom",  "format": "└──────────────────────────────────────────────┘" },
+    {
+      "type": "title",
+      "color": {
+        "user": "38;2;203;166;247",
+        "at": "38;2;108;112;134",
+        "host": "38;2;245;194;231"
+      }
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;203;166;247m\u256d\u2500\u2500\u001b[0m \u001b[38;2;203;166;247m\u001b[1m\uf2db  SYSTEM\u001b[0m \u001b[38;2;203;166;247m\u2500\u2500\u2500\u001b[38;2;192;160;234m\u2500\u2500\u2500\u001b[38;2;182;154;222m\u2500\u2500\u2500\u001b[38;2;171;148;209m\u2500\u2500\u2500\u001b[38;2;161;142;197m\u2500\u2500\u2500\u001b[38;2;150;136;184m\u2500\u2500\u2500\u001b[38;2;140;130;172m\u2500\u2500\u2500\u001b[38;2;129;124;159m\u2500\u2500\u2500\u001b[38;2;119;118;147m\u2500\u2500\u2500\u001b[38;2;108;112;134m\u2500\u2500\u2500\u001b[0m"
+    },
+    {
+      "type": "host",
+      "key": "\u2502  \uf108  Host",
+      "keyColor": "38;2;203;166;247"
+    },
+    {
+      "type": "display",
+      "key": "\u2502  \uf108  Display",
+      "keyColor": "38;2;203;166;247"
+    },
+    {
+      "type": "cpu",
+      "key": "\u2502  \uf2db  CPU",
+      "keyColor": "38;2;203;166;247",
+      "format": "{1}"
+    },
+    {
+      "type": "gpu",
+      "key": "\u2502  \uf1b2  GPU",
+      "keyColor": "38;2;203;166;247",
+      "format": "{2}"
+    },
+    {
+      "type": "memory",
+      "key": "\u2502  \uf1c0  Memory",
+      "keyColor": "38;2;203;166;247"
+    },
+    {
+      "type": "disk",
+      "key": "\u2502  \uf0a0  Disk",
+      "keyColor": "38;2;203;166;247",
+      "folders": "/"
+    },
+    {
+      "type": "battery",
+      "key": "\u2502  \uf240  Battery",
+      "keyColor": "38;2;203;166;247"
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;203;166;247m\u2570\u001b[0m\u001b[38;2;203;166;247m\u2500\u2500\u2500\u001b[38;2;196;162;239m\u2500\u2500\u2500\u001b[38;2;189;158;231m\u2500\u2500\u2500\u001b[38;2;183;154;223m\u2500\u2500\u2500\u001b[38;2;176;151;215m\u2500\u2500\u2500\u001b[38;2;169;147;207m\u2500\u2500\u2500\u001b[38;2;162;143;199m\u2500\u2500\u2500\u001b[38;2;156;139;190m\u2500\u2500\u2500\u001b[38;2;149;135;182m\u2500\u2500\u2500\u001b[38;2;142;131;174m\u2500\u2500\u2500\u001b[38;2;135;127;166m\u2500\u2500\u2500\u001b[38;2;128;124;158m\u2500\u2500\u2500\u001b[38;2;122;120;150m\u2500\u2500\u2500\u001b[38;2;115;116;142m\u2500\u2500\u2500\u001b[38;2;108;112;134m\u2500\u2500\u2500\u001b[0m"
+    },
     "break",
-    { "type": "custom", "format": "\u001b[35m \uf121 \u001b[0m➤ Software Specs" },
-    { "type": "custom", "format": "┌──────────────────────────────────────────────┐" },
-    { "type": "os",       "key": "\uf303  OS" },
-    { "type": "kernel",   "key": "\uf17c  Kernel" },
-    { "type": "wm",       "key": "\uf2d0  WM" },
-    { "type": "packages", "key": "\uf187  Package" },
-    { "type": "uptime",   "key": "\uf017  Uptime" },
-    //{ "type": "disk",     "key": "\uf073  OS Age", "format": "{create-time:10}", "folders": "/" },
-	{ "type": "command", "key": "\uf073 OS Age", "text": "echo $(( ( $(date +%s) - $(date -d \"$(head -1 /var/log/pacman.log | cut -d'[' -f2 | cut -d']' -f1)\" +%s) ) / 86400 )) days" },
-    { "type": "custom", "format": "└──────────────────────────────────────────────┘" },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;137;180;250m\u256d\u2500\u2500\u001b[0m \u001b[38;2;137;180;250m\u001b[1m\uf121  SOFTWARE\u001b[0m \u001b[38;2;137;180;250m\u2500\u2500\u2500\u001b[38;2;134;172;237m\u2500\u2500\u2500\u001b[38;2;131;165;224m\u2500\u2500\u2500\u001b[38;2;127;157;211m\u2500\u2500\u2500\u001b[38;2;124;150;198m\u2500\u2500\u2500\u001b[38;2;121;142;186m\u2500\u2500\u2500\u001b[38;2;118;135;173m\u2500\u2500\u2500\u001b[38;2;114;127;160m\u2500\u2500\u2500\u001b[38;2;111;120;147m\u2500\u2500\u2500\u001b[38;2;108;112;134m\u2500\u2500\u2500\u001b[0m"
+    },
+    {
+      "type": "os",
+      "key": "\u2502  \uf303  OS",
+      "keyColor": "38;2;137;180;250"
+    },
+    {
+      "type": "kernel",
+      "key": "\u2502  \uf17c  Kernel",
+      "keyColor": "38;2;137;180;250"
+    },
+    {
+      "type": "wm",
+      "key": "\u2502  \uf2d0  WM",
+      "keyColor": "38;2;137;180;250"
+    },
+    {
+      "type": "shell",
+      "key": "\u2502  \uf120  Shell",
+      "keyColor": "38;2;137;180;250"
+    },
+    {
+      "type": "terminal",
+      "key": "\u2502  \uf489  Terminal",
+      "keyColor": "38;2;137;180;250"
+    },
+    {
+      "type": "packages",
+      "key": "\u2502  \uf187  Packages",
+      "keyColor": "38;2;137;180;250"
+    },
+    {
+      "type": "uptime",
+      "key": "\u2502  \uf017  Uptime",
+      "keyColor": "38;2;137;180;250"
+    },
+    {
+      "type": "disk",
+      "key": "\u2502  \uf073  OS Age",
+      "keyColor": "38;2;137;180;250",
+      "format": "{create-time:10} ({days} days)",
+      "folders": "/"
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;137;180;250m\u2570\u001b[0m\u001b[38;2;137;180;250m\u2500\u2500\u2500\u001b[38;2;135;175;242m\u2500\u2500\u2500\u001b[38;2;133;170;233m\u2500\u2500\u2500\u001b[38;2;131;165;225m\u2500\u2500\u2500\u001b[38;2;129;161;217m\u2500\u2500\u2500\u001b[38;2;127;156;209m\u2500\u2500\u2500\u001b[38;2;125;151;200m\u2500\u2500\u2500\u001b[38;2;122;146;192m\u2500\u2500\u2500\u001b[38;2;120;141;184m\u2500\u2500\u2500\u001b[38;2;118;136;175m\u2500\u2500\u2500\u001b[38;2;116;131;167m\u2500\u2500\u2500\u001b[38;2;114;127;159m\u2500\u2500\u2500\u001b[38;2;112;122;151m\u2500\u2500\u2500\u001b[38;2;110;117;142m\u2500\u2500\u2500\u001b[38;2;108;112;134m\u2500\u2500\u2500\u001b[0m"
+    },
     "break",
-    { "type": "custom", "format": "\u001b[35m \uDB80\uDEA0 \u001b[0m➤ Personal Stats" },
-    { "type": "custom", "format": "┌──────────────────────────────────────────────┐" },
-    { "type": "command", "key": "\uf26c  Anilist", "text": "~/.config/fastfetch/scripts/anilist.sh" },
-    { "type": "command", "key": "\uf09b  Github",  "text": "~/.config/fastfetch/scripts/github.sh" },
-    { "type": "custom", "format": "└──────────────────────────────────────────────┘" },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;245;194;231m\u256d\u2500\u2500\u001b[0m \u001b[38;2;245;194;231m\u001b[1m\udb80\udea0  PERSONAL\u001b[0m \u001b[38;2;245;194;231m\u2500\u2500\u2500\u001b[38;2;230;185;220m\u2500\u2500\u2500\u001b[38;2;215;176;209m\u2500\u2500\u2500\u001b[38;2;199;167;199m\u2500\u2500\u2500\u001b[38;2;184;158;188m\u2500\u2500\u2500\u001b[38;2;169;148;177m\u2500\u2500\u2500\u001b[38;2;154;139;166m\u2500\u2500\u2500\u001b[38;2;138;130;156m\u2500\u2500\u2500\u001b[38;2;123;121;145m\u2500\u2500\u2500\u001b[38;2;108;112;134m\u2500\u2500\u2500\u001b[0m"
+    },
+    {
+      "type": "command",
+      "key": "\u2502  \uf26c  AniList",
+      "keyColor": "38;2;245;194;231",
+      "text": "~/.config/fastfetch/scripts/stat.sh anilist"
+    },
+    {
+      "type": "command",
+      "key": "\u2502  \uf09b  GitHub",
+      "keyColor": "38;2;245;194;231",
+      "text": "~/.config/fastfetch/scripts/stat.sh github"
+    },
+    {
+      "type": "command",
+      "key": "\u2502  \uf080  Activity",
+      "keyColor": "38;2;245;194;231",
+      "text": "~/.config/fastfetch/scripts/stat.sh activity"
+    },
+    {
+      "type": "command",
+      "key": "\u2502  \uf121  Languages",
+      "keyColor": "38;2;245;194;231",
+      "text": "~/.config/fastfetch/scripts/stat.sh langs"
+    },
+    {
+      "type": "command",
+      "key": "\u2502  \uf1da  Last Push",
+      "keyColor": "38;2;245;194;231",
+      "text": "~/.config/fastfetch/scripts/stat.sh lastpush"
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;245;194;231m\u2570\u001b[0m\u001b[38;2;245;194;231m\u2500\u2500\u2500\u001b[38;2;235;188;224m\u2500\u2500\u2500\u001b[38;2;225;182;217m\u2500\u2500\u2500\u001b[38;2;216;176;210m\u2500\u2500\u2500\u001b[38;2;206;171;203m\u2500\u2500\u2500\u001b[38;2;196;165;196m\u2500\u2500\u2500\u001b[38;2;186;159;189m\u2500\u2500\u2500\u001b[38;2;176;153;182m\u2500\u2500\u2500\u001b[38;2;167;147;176m\u2500\u2500\u2500\u001b[38;2;157;141;169m\u2500\u2500\u2500\u001b[38;2;147;135;162m\u2500\u2500\u2500\u001b[38;2;137;130;155m\u2500\u2500\u2500\u001b[38;2;128;124;148m\u2500\u2500\u2500\u001b[38;2;118;118;141m\u2500\u2500\u2500\u001b[38;2;108;112;134m\u2500\u2500\u2500\u001b[0m"
+    },
     "break",
-    { "type": "colors", "symbol": "diamond", "paddingLeft": 2 }
+    {
+      "type": "colors",
+      "symbol": "circle",
+      "paddingLeft": 2
+    },
+    {
+      "type": "custom",
+      "format": "  \u001b[38;2;245;224;220m\uf111 \u001b[38;2;242;205;205m\uf111 \u001b[38;2;245;194;231m\uf111 \u001b[38;2;203;166;247m\uf111 \u001b[38;2;243;139;168m\uf111 \u001b[38;2;235;160;172m\uf111 \u001b[38;2;250;179;135m\uf111 \u001b[38;2;249;226;175m\uf111 \u001b[38;2;166;227;161m\uf111 \u001b[38;2;148;226;213m\uf111 \u001b[38;2;137;220;235m\uf111 \u001b[38;2;116;199;236m\uf111 \u001b[38;2;137;180;250m\uf111 \u001b[38;2;180;190;254m\uf111\u001b[0m"
+    }
   ]
 }

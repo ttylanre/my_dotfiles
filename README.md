@@ -1,43 +1,52 @@
-# 📦 Dotfiles
+# Linux dotfiles
 
-[![CI](https://img.shields.io/github/actions/workflow/status/lanre647/my_dotfiles/dotfiles.yml?label=CI&logo=github)](#)
-[![Manager](https://img.shields.io/badge/managed%20with-stow-green)](#)
-[![License](https://img.shields.io/badge/license-MIT-lightgrey)](#)
+A personal Linux workstation, configured with **GNU Stow**. This repository brings together desktop, terminal, and development configs, with an installer designed to link them without overwriting existing files.
 
-Personal Linux-focused configs managed with **GNU Stow**. The installer links configs; it does not replace conflicting files or attempt to install every application referenced by the configs.
+[![CI](https://img.shields.io/github/actions/workflow/status/lanre647/my_dotfiles/dotfiles.yml?label=CI&logo=github)](https://github.com/lanre647/my_dotfiles/actions/workflows/dotfiles.yml)
+[![Managed with GNU Stow](https://img.shields.io/badge/managed%20with-GNU%20Stow-4b8bbe)](https://www.gnu.org/software/stow/)
+[![MIT License](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
-## 📸 Showcase
+## The setup
 
-### 01. Workspace & Tiling
-![Workspace Overview](./screenshots/hero.webp)
-> **Window Manager / Compositor:** Niri / Wayland
-> **Status Bar:** Waybar
-> **Color Palette:** Catppuccin Mocha
+### Workspace
 
-### 02. Development Workflow
-![Neovim Setup](./screenshots/editor.webp)
-> **Editor:** Neovim (Lua config)
-> **Plugins:** Fzf-lua, Treesitter, Mason, Native LSP
-> **Terminal:** Kitty
+![Linux desktop workspace](./screenshots/hero.webp)
 
-### 03. Utilities & CLI
-![CLI Tools](./screenshots/utilities.webp)
-> **System Monitor:** htop
-> **Launcher:** Fuzzel
-> **Fetch Tool:** Fastfetch
-> **Networking Tool:** nmtui
-> **Matrix:** unimatrix
-> **Visualiser:** cava
+Niri on Wayland, with Waybar, zsh, Kitty, and Starship. The current color palette is Catppuccin Mocha.
 
-## Quick start
+### Development
 
-Requirements for the remote bootstrap: Bash, Git, and an internet connection. It clones into `~/.dotfiles`, initializes the bundled submodules, installs missing base tools, and links all packages.
+![Neovim development setup](./screenshots/editor.webp)
+
+Neovim with a Lua configuration, Fzf-lua, Treesitter, Mason, and native LSP.
+
+### Utilities
+
+![Command-line utilities](./screenshots/utilities.webp)
+
+The CLI toolkit includes btop, yazi, Fuzzel, Fastfetch, nmtui, unimatrix, and cava.
+
+### Notifications
+
+![SwayNC notifications](./screenshots/notification.webp)
+
+### Wallpaper picker
+
+![Wallpaper picker with Niri window rules](./screenshots/wallpaper-picker.webp)
+
+## Install
+
+### Bootstrap
+
+Requires Bash, Git, and an internet connection. The bootstrap script clones the repository to `~/.dotfiles`, initializes submodules, installs missing base tools without prompting, then links the configs.
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/lanre647/my_dotfiles/main/bootstrap.sh)
 ```
 
-Review the installer actions first with a local checkout:
+### Review before installing
+
+Clone locally to inspect the proposed links before applying them:
 
 ```bash
 git clone --recurse-submodules https://github.com/lanre647/my_dotfiles.git ~/.dotfiles
@@ -46,11 +55,11 @@ cd ~/.dotfiles
 ./install.sh
 ```
 
-The interactive installer asks before installing missing base tools. `--yes` enables package installation without prompting; `--no-packages` skips it. Supported package managers are apt, pacman, dnf, Homebrew, and Termux `pkg`. On a machine without one of these, install GNU Stow, Git, tmux, zsh, and Vim yourself.
+The installer asks before installing missing base tools when run interactively. Use `--yes` to install without prompting or `--no-packages` to skip package installation. Supported package managers are apt, pacman, dnf, Homebrew, and Termux `pkg`. If your system uses a different package manager, install GNU Stow, Git, tmux, zsh, and Vim yourself.
 
-## Selecting packages
+## Choose what to link
 
-By default, every available Stow package is linked, including the desktop-specific Niri, Waybar, X11, and swaylock configs. Limit the change to one or more packages if appropriate:
+By default, the installer links every available package, including desktop-specific configs. Select only the packages you need:
 
 ```bash
 ./install.sh --package nvim --package git --no-packages
@@ -58,24 +67,30 @@ By default, every available Stow package is linked, including the desktop-specif
 ./install.sh --target "$HOME/test-dotfiles" --dry-run
 ```
 
-Packages are `bin`, `clipmenu`, `dunst`, `fastfetch`, `fuzzel`, `git`, `kitty`, `lazygit`, `mako`, `niri`, `nvim`, `picom`, `scripts`, `starship`, `swaylock`, `tmux`, `vim`, `waybar`, `x11`, and `zsh`.
+Available packages:
 
-GNU Stow's conflict checks are intentional: if a target file already exists and is not one of these dotfiles' links, Stow reports the conflict and leaves it in place. Back up or move the conflicting file yourself, then rerun the installer. Re-running the installer updates existing links.
+| Area | Packages |
+| --- | --- |
+| Desktop | `clipmenu`, `dunst`, `fuzzel`, `kitty`, `mako`, `niri`, `picom`, `swaylock`, `waybar`, `x11` |
+| Terminal and tools | `bin`, `fastfetch`, `git`, `lazygit`, `scripts`, `starship`, `tmux`, `vim`, `zsh` |
+| Development | `nvim` |
+
+GNU Stow checks for conflicts. If a target file already exists and is not one of these dotfiles' links, Stow reports the conflict and leaves the file untouched. Back up or move the conflicting file yourself, then rerun the installer. Re-running updates existing links.
 
 ## What gets linked
 
-- Most packages map their directory contents into `$HOME` (for example, `nvim/.config/nvim` maps to `~/.config/nvim`).
-- `scripts` is linked into `~/bin`; `bin` is linked into `~/.local/bin`.
-- `.config` is kept as a normal directory. Stow uses `--no-folding` so unrelated files under it are not hidden by a directory symlink.
-- Tmux Plugin Manager is included as a Git submodule. The tmux config can install TPM/plugins on first launch; plugin downloads require network access.
+- Most packages map their contents into `$HOME`; for example, `nvim/.config/nvim` becomes `~/.config/nvim`.
+- The `bin` package provides commands under `~/.local/bin`; `scripts` is linked into `~/bin`.
+- `.config` remains a normal directory. Stow runs with `--no-folding`, so unrelated files under it are not hidden by a directory symlink.
+- Tmux Plugin Manager is included as a Git submodule. The tmux config can install TPM and plugins on first launch; plugin downloads require an internet connection.
 
 ## Requirements and optional applications
 
-The installer only installs the base tools needed for Stow and the main terminal configs: GNU Stow, Git, tmux, zsh, and Vim. Desktop environments and their programs have additional dependencies that vary by package (for example Niri, Kitty, fuzzel, Waybar, and wallpaper utilities); install those with your system's package manager as needed.
+The installer handles the base tools needed by the configs: GNU Stow, Git, tmux, zsh, and Vim. It does not install desktop environments or configuration-specific applications. Programs such as Niri, Kitty, Fuzzel, Waybar, and wallpaper utilities must be installed separately with your system's package manager.
 
-Zsh starts without Oh My Zsh if it is not installed. Starship, zoxide, fzf, fnm, eza, and custom Oh My Zsh plugins are optional and initialized only when available. Some aliases and desktop keybindings still require their corresponding applications.
+Zsh works without Oh My Zsh. Starship, zoxide, fzf, fnm, eza, and custom Oh My Zsh plugins are optional and initialized only when available. Some aliases and desktop keybindings still depend on their corresponding applications.
 
-## Uninstalling links
+## Uninstall
 
 From the repository root, remove links for selected packages with Stow:
 
@@ -88,8 +103,8 @@ This removes links only; it does not uninstall applications or delete user data.
 
 ## Repository layout
 
-Each top-level config directory is a Stow package. The `scripts/` package has a separate target (`~/bin`); `pkgs/` contains package lists and is not linked.
+Each package listed by `./install.sh --list` contains the files Stow links into the target directory. The `scripts` package uses a separate target (`~/bin`); `pkgs/` contains package lists and is not linked.
 
 ## License
 
-MIT — use it, fork it, improve it.
+[MIT](./LICENSE)

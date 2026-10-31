@@ -37,8 +37,8 @@ clipmenud &
 udiskie &
 
 # Start the wallpaper
-# feh --bg-fill /home/lanre/Pictures/wallpapers/monster-energy-anime_1.webp
-feh --bg-fill /home/lanre/Pictures/wallpapers/"12. Catppuccin Mocha.jpg" # Set the wallpaper
+# feh --bg-fill /home/lanre/Pictures/wallpapers/"12. Catppuccin Mocha.jpg" # Set the wallpaper
+feh --bg-fill /usr/share/endeavouros/backgrounds/eos_wallpapers_community/CASSINI-3-MAIN-LOGO.png
 #while true; do
 #feh --bg-fill "$(find ~/Pictures/wallpapers -type f | shuf -n 1)"
 #    sleep 3m
