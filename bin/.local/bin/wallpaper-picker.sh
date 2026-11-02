@@ -10,7 +10,8 @@ SELF=$(readlink -f "$0")
 list_wallpapers() {
 	find "$DIR" -maxdepth 1 -type f \
 		\( -iname "*.jpg" -o -iname "*.png" -o -iname "*.jpeg" -o -iname "*.webp" \) \
-		! -name "blur_*" -printf '%f\t%p\n'
+		! -name "blur_*" -printf '%f\t%p\n' |
+		awk -F'\t' -v OFS='\t' '{ sub(/\.[^.]+$/, "", $1); print }'
 }
 
 case "$1" in
@@ -74,12 +75,11 @@ awww img "$selected" --transition-type "$TRANSITION"
 # Clean old blurred wallpapers
 find "$DIR" -maxdepth 1 -type f -name "blur_*" -delete
 
-# Generate blurred copy for overview-wall (background, so we exit instantly)
+# Generate blurred copy and set it on the overview-wall target
 filename=$(basename "$selected")
 blurred_path="$DIR/blur_$filename"
 
-(
-	magick "$selected" -blur 0x9 "$blurred_path" &&
-		awww img -n overview-wall "$blurred_path"
-) &>/dev/null &
-disown
+# Runs fully detached (own session) so it survives the terminal closing
+setsid -f bash -c '
+  magick "$1" -blur 0x9 "$2" && awww img -n overview-wall "$2"
+' _ "$selected" "$blurred_path" &>/dev/null
