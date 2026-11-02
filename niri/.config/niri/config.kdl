@@ -147,43 +147,141 @@ layout {
 
 // ── Animations ──────────────────────────────────────────────────────────────
 animations {
-    // off
-    // slowdown 3.0
+    // Set to 3.0 when you want to inspect the shaders in slow motion
     slowdown 2.0
 
-    // Windows pop in with a fast expo ease and fade out quickly
+    // ── Window open: tilt-in ─────────────────────────────────────
+    // Starts tipped back in perspective and slightly small, then swings
+    // flat while a soft wipe reveals it top to bottom. A faint colour
+    // fringe shrinks to nothing. No brightness changes anywhere.
     window-open {
-        duration-ms 220
-        curve "ease-out-expo"
+        duration-ms 260
+        curve "linear"
+        custom-shader r"
+            vec4 fx_tex(vec2 uv) {
+                if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) return vec4(0.0);
+                return texture2D(niri_tex, (niri_geo_to_tex * vec3(uv, 1.0)).st);
+            }
+
+            // inverse-map a plane rotated around its horizontal centre axis
+            vec2 fx_tilt(vec2 uv, float theta) {
+                float d = 2.0;
+                vec2 s = uv - 0.5;
+                float den = d * cos(theta) - s.y * sin(theta);
+                float yp = s.y * d / den;
+                float xp = s.x * (d + yp * sin(theta)) / d;
+                return vec2(xp, yp) + 0.5;
+            }
+
+            vec4 open_color(vec3 coords_geo, vec3 size_geo) {
+                float p = niri_clamped_progress;
+                float g = pow(1.0 - p, 3.0);          // 1 -> 0, ease-out
+                float e = 1.0 - g;
+
+                vec2 uv = coords_geo.xy;
+                uv = (uv - 0.5) / mix(0.92, 1.0, e) + 0.5;   // slight scale-up
+                uv = fx_tilt(uv, 0.6 * g * g);               // swing flat
+
+                float split = g * g * 0.012;                 // fringe shrinks only
+                vec4 sr = fx_tex(uv + vec2(split, 0.0));
+                vec4 sg = fx_tex(uv);
+                vec4 sb = fx_tex(uv - vec2(split, 0.0));
+                vec4 c = vec4(sr.r, sg.g, sb.b, max(sr.a, max(sg.a, sb.a)));
+
+                // feathered wipe, top to bottom
+                float reveal = smoothstep(0.0, 0.35, e * 1.35 - coords_geo.y);
+                return c * reveal;
+            }
+        "
     }
 
+    // ── Window close: tilt-out ───────────────────────────────────
+    // The exact time-reverse of the open: tips back, shrinks a little,
+    // and wipes away from the bottom up.
     window-close {
-        duration-ms 150
-        curve "ease-out-quad"
+        duration-ms 240
+        curve "linear"
+        custom-shader r"
+            vec4 fx_tex(vec2 uv) {
+                if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) return vec4(0.0);
+                return texture2D(niri_tex, (niri_geo_to_tex * vec3(uv, 1.0)).st);
+            }
+
+            vec2 fx_tilt(vec2 uv, float theta) {
+                float d = 2.0;
+                vec2 s = uv - 0.5;
+                float den = d * cos(theta) - s.y * sin(theta);
+                float yp = s.y * d / den;
+                float xp = s.x * (d + yp * sin(theta)) / d;
+                return vec2(xp, yp) + 0.5;
+            }
+
+            vec4 close_color(vec3 coords_geo, vec3 size_geo) {
+                float p = niri_clamped_progress;
+                float g = p * p * p;                  // 0 -> 1, ease-in
+                float e = 1.0 - g;
+
+                vec2 uv = coords_geo.xy;
+                uv = (uv - 0.5) / mix(0.92, 1.0, e) + 0.5;
+                uv = fx_tilt(uv, 0.6 * g * g);
+
+                float split = g * g * 0.012;
+                vec4 sr = fx_tex(uv + vec2(split, 0.0));
+                vec4 sg = fx_tex(uv);
+                vec4 sb = fx_tex(uv - vec2(split, 0.0));
+                vec4 c = vec4(sr.r, sg.g, sb.b, max(sr.a, max(sg.a, sb.a)));
+
+                float reveal = smoothstep(0.0, 0.35, e * 1.35 - coords_geo.y);
+                return c * reveal;
+            }
+        "
     }
 
+    // ── Resize: chromatic crossfade ──────────────────────────────
+    // Crossfades old/new contents with an RGB split that peaks mid-resize.
+    window-resize {
+        spring damping-ratio=0.9 stiffness=600 epsilon=0.0001
+        custom-shader r"
+            vec4 resize_color(vec3 coords_curr_geo, vec3 size_curr_geo) {
+                float p   = niri_clamped_progress;
+                float amt = sin(p * 3.14159265) * 0.012;
+                vec3 off  = vec3(amt, 0.0, 0.0);
+
+                vec4 pr = texture2D(niri_tex_prev, (niri_geo_to_tex_prev * (coords_curr_geo + off)).st);
+                vec4 pg = texture2D(niri_tex_prev, (niri_geo_to_tex_prev *  coords_curr_geo).st);
+                vec4 pb = texture2D(niri_tex_prev, (niri_geo_to_tex_prev * (coords_curr_geo - off)).st);
+
+                vec4 nr = texture2D(niri_tex_next, (niri_geo_to_tex_next * (coords_curr_geo + off)).st);
+                vec4 ng = texture2D(niri_tex_next, (niri_geo_to_tex_next *  coords_curr_geo).st);
+                vec4 nb = texture2D(niri_tex_next, (niri_geo_to_tex_next * (coords_curr_geo - off)).st);
+
+                vec4 prev = vec4(pr.r, pg.g, pb.b, pg.a);
+                vec4 next = vec4(nr.r, ng.g, nb.b, ng.a);
+                return mix(prev, next, p);
+            }
+        "
+    }
+
+    // ── Screenshot UI: shaders aren't supported here ─────────────
     screenshot-ui-open {
-        duration-ms 250
+        duration-ms 200
         curve "ease-out-quad"
     }
 
-    // Springs: lower damping-ratio = bouncier, higher stiffness = snappier.
-    // Panning between columns / workspaces: quick with a slight overshoot
+    // ── Springs ──────────────────────────────────────────────────
+    // Rule of thumb: things you trigger constantly (focus moves, workspace
+    // switches) are close to critically damped; rarer things can overshoot.
     workspace-switch {
-        spring damping-ratio=0.75 stiffness=550 epsilon=0.0001
+        spring damping-ratio=0.85 stiffness=700 epsilon=0.0001
     }
 
     horizontal-view-movement {
-        spring damping-ratio=0.82 stiffness=600 epsilon=0.0001
+        spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
     }
 
-    // Windows sliding around feel a little springy
+    // The one deliberately jelly animation
     window-movement {
-        spring damping-ratio=0.7 stiffness=500 epsilon=0.0001
-    }
-
-    window-resize {
-        spring damping-ratio=0.85 stiffness=500 epsilon=0.0001
+        spring damping-ratio=0.78 stiffness=650 epsilon=0.0001
     }
 
     config-notification-open-close {
@@ -191,7 +289,7 @@ animations {
     }
 
     overview-open-close {
-        spring damping-ratio=0.72 stiffness=450 epsilon=0.0005
+        spring damping-ratio=0.9 stiffness=600 epsilon=0.0005
     }
 }
 
@@ -558,7 +656,9 @@ binds {
     // Cycle night light (Off → 4500K → 3500K → 2700K)
     Mod+N { spawn "nightlight-cycle"; }
 
+    // ────────────────────────────────────────────────────────────────────────
     // ── SYSTEM & OVERLAYS ───────────────────────────────────────────────────
+    // ────────────────────────────────────────────────────────────────────────
     Mod+Shift+B hotkey-overlay-title="Toggle Waybar" repeat=false { spawn "toggle-waybar"; }
     Mod+O hotkey-overlay-title="Toggle Overview" repeat=false { toggle-overview; }
     Mod+Alt+L { spawn "swaylock"; }
@@ -577,7 +677,9 @@ binds {
     Mod+Ctrl+D { spawn "kitty" "--class" "tui-overlay" "-e" "lazydocker"; }
     Mod+Ctrl+N { spawn "swaync-client" "-t" "-sw"; }
 
+    // ────────────────────────────────────────────────────────────────────────
     // ── WINDOW MANAGEMENT & CLOSING ─────────────────────────────────────────
+    // ────────────────────────────────────────────────────────────────────────
     Mod+Q { close-window; }
 
     Mod+Ctrl+Shift+Delete hotkey-overlay-title="Kill all windows (Global)" {
@@ -596,7 +698,9 @@ binds {
         spawn "sh" "-c" "niri msg --json windows | jq -r '(.[] | select(.is_focused == true) | .workspace_id) as $ws | .[] | select(.workspace_id == $ws) | .id' | xargs -r -I {} niri msg action close-window --id {}"
     }
 
+    // ────────────────────────────────────────────────────────────────────────
     // ── NAVIGATION & FOCUS ──────────────────────────────────────────────────
+    // ────────────────────────────────────────────────────────────────────────
     Mod+H     { focus-column-left; }
     Mod+L     { focus-column-right; }
     Mod+J     { focus-window-down; }
@@ -642,7 +746,9 @@ binds {
     Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
     Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
 
+    // ────────────────────────────────────────────────────────────────────────
     // ── SIZING, LAYOUT & FLOATING ───────────────────────────────────────────
+    // ────────────────────────────────────────────────────────────────────────
     Mod+Minus       { set-column-width "-10%"; }
     Mod+Equal       { set-column-width "+10%"; }
     Mod+Shift+Minus { set-window-height "-10%"; }
@@ -668,7 +774,9 @@ binds {
     Mod+Bracketright { consume-or-expel-window-right; }
     Mod+Alt+T        { toggle-column-tabbed-display; }
 
+    // ────────────────────────────────────────────────────────────────────────
     // ── WORKSPACES ──────────────────────────────────────────────────────────
+    // ────────────────────────────────────────────────────────────────────────
     Mod+1 { focus-workspace 1; }
     Mod+2 { focus-workspace 2; }
     Mod+3 { focus-workspace 3; }
@@ -696,7 +804,9 @@ binds {
     Mod+Alt+J { move-workspace-down; }
     Mod+Alt+K { move-workspace-up; }
 
+    // ────────────────────────────────────────────────────────────────────────
     // ── MOUSE WHEEL ─────────────────────────────────────────────────────────
+    // ────────────────────────────────────────────────────────────────────────
     Mod+WheelScrollDown       cooldown-ms=150 { focus-workspace-down; }
     Mod+WheelScrollUp         cooldown-ms=150 { focus-workspace-up; }
     Mod+Ctrl+WheelScrollDown  cooldown-ms=150 { move-column-to-workspace-down; }
@@ -707,7 +817,9 @@ binds {
     Mod+WheelScrollRight      { focus-column-right; }
     Mod+WheelScrollLeft       { focus-column-left; }
 
+    // ────────────────────────────────────────────────────────────────────────
     // ── HARDWARE (SwayOSD) ──────────────────────────────────────────────────
+    // ────────────────────────────────────────────────────────────────────────
     // allow-when-locked lets these keep working on the lock screen
     XF86AudioRaiseVolume   allow-when-locked=true { spawn "swayosd-client" "--output-volume" "raise"; }
     XF86AudioLowerVolume   allow-when-locked=true { spawn "swayosd-client" "--output-volume" "lower"; }
@@ -725,7 +837,9 @@ binds {
     // XF86MonBrightnessUp  { spawn "brightnessctl" "set" "+5%"; }
     // XF86MonBrightnessDown { spawn "brightnessctl" "set" "5%-"; }
 
+    // ────────────────────────────────────────────────────────────────────────
     // ── SCREENSHOTS & TOOLS ─────────────────────────────────────────────────
+    // ────────────────────────────────────────────────────────────────────────
     Print      { screenshot; }
     Ctrl+Print { screenshot-screen; }
     Alt+Print  { screenshot-window; }
