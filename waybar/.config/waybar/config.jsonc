@@ -61,22 +61,24 @@
     "interval": 1,
     "format": "{:%a %d %b  %H:%M}",
     "format-alt": "{:%A, %d %B %Y  ·  %H:%M:%S}",
-    // calendar card: big weekday + date, month grid, week/day-of-year footer.
-    // colours here are Catppuccin Mocha hex (Pango markup can't read colors.css)
-    "tooltip-format": "<span size='large' weight='bold' color='#cba6f7'>{0:%A}</span>  <span color='#a6adc8'>{0:%d %B %Y}</span>\n\n<tt>{calendar}</tt>\n<span size='small' color='#6c7086'>Week {0:%V}  ·  Day {0:%j}</span>",
+    // HUD calendar. Colours are fixed hex (Pango markup can't read colors.css):
+    // cyan #89dceb accent, mauve #cba6f7, text #cdd6f4, dim #6c7086 / #45475a.
+    // Every date placeholder uses {0:...}: plain {} would grab a second, missing argument.
+    "tooltip-format": "<span color='#89dceb'>▌</span><span size='large' weight='bold' text_transform='uppercase' letter_spacing='2048' color='#cdd6f4'> {0:%A}</span>\n<span color='#6c7086'>  {0:%d %B %Y}</span>  <span color='#89dceb'>//</span>  <span color='#6c7086'>W{0:%V} · D{0:%j}</span>\n<span color='#89dceb'>━━━━</span><span color='#45475a'>━━━━━━━━━━━━━━━━━━━━━━</span>\n<tt>{calendar}</tt>\n<span color='#45475a'>──────────────────────────</span>\n<span size='small' color='#6c7086'>SCROLL·MONTH   R-CLICK·YEAR   MID·TODAY</span>",
     "calendar": {
       "mode": "month",
       "mode-mon-col": 3,
       "weeks-pos": "left",
       "on-scroll": 1,
       "format": {
-        "months":   "<span color='#cba6f7'><b>{}</b></span>",
-        "weeks":    "<span color='#585b70'><small>{}</small></span>",
-        "weekdays": "<span color='#89b4fa'><b>{}</b></span>",
-        "days":     "<span color='#cdd6f4'>{}</span>",
-        "today":    "<span color='#11111b' bgcolor='#89b4fa'><b>{}</b></span>"
+        "months":   "<span color='#cba6f7' weight='bold' text_transform='uppercase'>{}</span>",
+        "weeks":    "<span color='#45475a' size='small'>{}</span>",
+        "weekdays": "<span color='#89dceb' weight='bold' text_transform='uppercase'>{}</span>",
+        "days":     "<span color='#a6adc8'>{}</span>",
+        "today":    "<span color='#11111b' bgcolor='#89dceb' weight='bold'>{}</span>"
       }
     },
+
     // touchpads send many tiny scroll events per swipe; only act once the movement
     // adds up to this much (raise it if months still fly past, lower it if it feels stiff)
     "smooth-scrolling-threshold": 3,

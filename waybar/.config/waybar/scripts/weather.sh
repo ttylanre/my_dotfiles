@@ -130,8 +130,10 @@ rainbar() { # rainbar <percent>  ->  coloured 5-segment bar + percentage
 		"$C_BLUE" "$f" "$C_DIM" "$e" "$C_SUB" "$p"
 }
 
-hdr() { printf "<span size='small' weight='bold' color='%s'>%s</span>" "$C_DIM" "$1"; }
+hdr() { printf "<span color='%s'>//</span> <span size='small' weight='bold' letter_spacing='1024' color='%s'>%s</span>" "$C_SKY" "$C_DIM" "$1"; }
 RULE="<span color='$C_DIM'>──────────────────────────</span>"
+HEADRULE="<span color='$C_SKY'>━━━━</span><span color='$C_DIM'>━━━━━━━━━━━━━━━━━━━━━━</span>"
+coords=$(awk -v la="$LAT" -v lo="$LON" 'BEGIN{printf "%.2f°%s %.2f°%s", (la<0?-la:la), (la<0?"S":"N"), (lo<0?-lo:lo), (lo<0?"W":"E")}')
 
 IFS=$'\t' read -r temp feels hum wind code isday \
 	<<<"$(jq -r '.current | [(.temperature_2m|round), (.apparent_temperature|round), .relative_humidity_2m, (.wind_speed_10m|round), .weather_code, .is_day] | @tsv' <<<"$data")"
@@ -150,22 +152,23 @@ if ((rain >= RAIN_ALERT)); then
 fi
 [[ -n $stale ]] && classes+=',"stale"'
 
-# ---- tooltip (Pango markup) ----
+# ---- tooltip (Pango markup, HUD style) ----
 tc=$(tcol "$temp")
 fc=$(tcol "$feels")
-tip="<span size='large' weight='bold' color='$C_MAUVE'>$LABEL</span>"
-tip+=$'\n'"<span size='xx-large' color='$tc'>$(icon "$code" "$isday")</span>  <span size='xx-large' weight='bold' color='$tc'>${temp}°</span>"
-tip+=$'\n'"<span color='$C_SUB'>$(desc "$code")</span>  <span color='$C_DIM'>·</span>  <span color='$C_SUB'>feels like</span> <span color='$fc'>${feels}°</span>"
-tip+=$'\n'"<span color='$C_SKY'>$ICON_HUM</span> ${hum}%    <span color='$C_TEAL'>$ICON_WIND</span> ${wind} km/h"
+dsc=$(desc "$code")
+tip="<span color='$C_SKY'>▌</span><span size='large' weight='bold' letter_spacing='2048' color='$C_TEXT'> ${LABEL^^}</span>  <span size='small' color='$C_DIM'>$coords</span>"
+tip+=$'\n'"$HEADRULE"
+tip+=$'\n'"<span size='xx-large' color='$tc'>$(icon "$code" "$isday")</span>  <span size='xx-large' weight='bold' color='$tc'>${temp}°</span>  <span color='$C_SUB'>${dsc^^}</span>"
+tip+=$'\n'"<span color='$C_DIM'>FEELS</span> <span color='$fc'>${feels}°</span>   <span color='$C_DIM'>HUM</span> <span color='$C_SKY'>${hum}%</span>   <span color='$C_DIM'>WIND</span> <span color='$C_TEAL'>${wind}</span><span size='small' color='$C_DIM'>KM/H</span>"
 
 if [[ -n $sunrise && -n $sunset ]]; then
 	uvc=$C_GREEN
 	((uv >= 3)) && uvc=$C_YELLOW
 	((uv >= 6)) && uvc=$C_PEACH
 	((uv >= 8)) && uvc=$C_RED
-	tip+=$'\n'"<span color='$C_YELLOW'>$ICON_SUNRISE</span> $sunrise   <span color='$C_PEACH'>$ICON_SUNSET</span> $sunset   <span color='$uvc'>UV $uv</span>"
+	tip+=$'\n'"<span color='$C_YELLOW'>$ICON_SUNRISE</span> $sunrise   <span color='$C_PEACH'>$ICON_SUNSET</span> $sunset   <span color='$C_DIM'>UV</span> <span color='$uvc'>$uv</span>"
 fi
-[[ -n $stale ]] && tip+=$'\n'"<span color='$C_PEACH'>offline: showing last update</span>"
+[[ -n $stale ]] && tip+=$'\n'"<span color='$C_PEACH'>OFFLINE // LAST UPDATE</span>"
 
 tip+=$'\n\n'"$(hdr 'NEXT HOURS')"$'\n'"$RULE"
 while IFS=$'\t' read -r t c d tp pr; do
@@ -177,6 +180,7 @@ tip+=$'\n\n'"$(hdr 'NEXT DAYS')"$'\n'"$RULE"
 n=0
 while IFS=$'\t' read -r day c hi lo pr; do
 	if ((n == 0)); then label="Today"; else label=$(date -d "$day" +%a 2>/dev/null || echo "$day"); fi
+	label=${label^^}
 	hc=$(tcol "$hi")
 	tip+=$'\n'"<span color='$C_SUB'>$(printf '%-5s' "$label")</span> <span color='$hc'>$(icon "$c" 1)</span> <span color='$C_SKY'>$(printf '%2s' "$lo")°</span><span color='$C_DIM'>–</span><span color='$hc'>$(printf '%2s' "$hi")°</span>  $(rainbar "$pr")"
 	n=$((n + 1))

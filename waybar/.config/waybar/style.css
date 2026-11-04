@@ -6,7 +6,8 @@
 * {
   border: none;
   border-radius: 0;
-  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", "Symbols Nerd Font", monospace;
+  font-family:
+    "JetBrainsMono Nerd Font", "JetBrains Mono", "Symbols Nerd Font", monospace;
   font-size: 13px;
   min-height: 0;
 }
@@ -63,7 +64,7 @@ window#waybar {
   padding: 0;
   margin: 10px 4px;
   border-radius: 8px;
-  background: @subtext;          /* has windows */
+  background: @subtext; /* has windows */
   box-shadow: none;
   transition: all 0.3s ease;
 }
@@ -79,7 +80,7 @@ window#waybar {
 }
 
 #workspaces button.empty {
-  background: alpha(@overlay, 0.5);   /* named but empty: faint dot */
+  background: alpha(@overlay, 0.5); /* named but empty: faint dot */
 }
 
 #workspaces button:hover {
@@ -87,7 +88,7 @@ window#waybar {
 }
 
 #workspaces button.active {
-  min-width: 24px;               /* the stretched pill */
+  min-width: 24px; /* the stretched pill */
   background: linear-gradient(90deg, @blue, @mauve);
 }
 
@@ -117,7 +118,13 @@ window#waybar {
   background: linear-gradient(90deg, alpha(@mantle, 0.9), alpha(@mauve, 0.08));
 }
 
-/* colour follows loudness (class set by cava.sh) */
+/* colour follows loudness (class set by cava.sh).
+   No transition here: the class can flip every frame, and a transition would keep
+   the whole bar animating (and redrawing) the entire time music plays. */
+#custom-cava {
+  transition: none;
+}
+
 #custom-cava.idle {
   color: @overlay;
   /* no audio: collapse so it takes no space (fallback if hide-empty-text is unsupported) */
@@ -127,9 +134,18 @@ window#waybar {
   padding: 0;
   min-width: 0;
 }
-#custom-cava.low  { color: @blue;     border-color: alpha(@blue, 0.35); }
-#custom-cava.mid  { color: @mauve;    border-color: alpha(@mauve, 0.4); }
-#custom-cava.high { color: @pink;     border-color: alpha(@pink, 0.55); }
+#custom-cava.low {
+  color: @blue;
+  border-color: alpha(@blue, 0.35);
+}
+#custom-cava.mid {
+  color: @mauve;
+  border-color: alpha(@mauve, 0.4);
+}
+#custom-cava.high {
+  color: @pink;
+  border-color: alpha(@pink, 0.55);
+}
 
 /* ── clock ──────────────────────────────────── */
 #clock {
@@ -201,15 +217,29 @@ window#waybar {
   border-left: 1px solid alpha(@overlay, 0.35);
 }
 
-#pulseaudio  { color: @red; }
-#pulseaudio.muted { color: @overlay; }
-#backlight   { color: @peach; }
-#network     { color: @sky; }
+#pulseaudio {
+  color: @red;
+}
+#pulseaudio.muted {
+  color: @overlay;
+}
+#backlight {
+  color: @peach;
+}
+#network {
+  color: @sky;
+}
 #network.disconnected,
-#network.disabled { color: @overlay; }
-#battery     { color: @green; }
+#network.disabled {
+  color: @overlay;
+}
+#battery {
+  color: @green;
+}
 
-#battery.warning:not(.charging) { color: @yellow; }
+#battery.warning:not(.charging) {
+  color: @yellow;
+}
 
 /* charging: a slow, gentle breathing pulse */
 #battery.charging:not(.full) {
@@ -217,8 +247,12 @@ window#waybar {
 }
 
 @keyframes breathe {
-  from { opacity: 1; }
-  to   { opacity: 0.55; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.55;
+  }
 }
 
 /* 15% or less and unplugged: solid red chip that pulses hard */
@@ -231,14 +265,24 @@ window#waybar {
 }
 
 @keyframes alert {
-  from { opacity: 1; }
-  to   { opacity: 0.45; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.45;
+  }
 }
 
 /* power profile colour follows the mode */
-#custom-powerprofile.performance { color: @red; }
-#custom-powerprofile.balanced    { color: @blue; }
-#custom-powerprofile.power-saver { color: @green; }
+#custom-powerprofile.performance {
+  color: @red;
+}
+#custom-powerprofile.balanced {
+  color: @blue;
+}
+#custom-powerprofile.power-saver {
+  color: @green;
+}
 #custom-powerprofile.offline {
   min-width: 0;
   padding: 0;
@@ -293,19 +337,34 @@ trough highlight {
   border-left: 1px solid alpha(@overlay, 0.35);
 }
 
-#custom-arrow { color: @overlay; font-size: 15px; }
-#custom-arrow:hover { color: @text; }
+#custom-arrow {
+  color: @overlay;
+  font-size: 15px;
+}
+#custom-arrow:hover {
+  color: @text;
+}
 
-#cpu         { color: @blue; }
-#memory      { color: @mauve; }
-#temperature { color: @peach; }
+#cpu {
+  color: @blue;
+}
+#memory {
+  color: @mauve;
+}
+#temperature {
+  color: @peach;
+}
 
 #cpu.warning,
-#memory.warning { color: @yellow; }
+#memory.warning {
+  color: @yellow;
+}
 
 #cpu.critical,
 #memory.critical,
-#temperature.critical { color: @red; }
+#temperature.critical {
+  color: @red;
+}
 
 /* ── notifications (swaync) ─────────────────── */
 #session {
@@ -327,11 +386,15 @@ trough highlight {
   color: @text;
 }
 #custom-notification.notification,
-#custom-notification.inhibited-notification { color: @peach; }
+#custom-notification.inhibited-notification {
+  color: @peach;
+}
 #custom-notification.dnd-none,
 #custom-notification.dnd-notification,
 #custom-notification.dnd-inhibited-none,
-#custom-notification.dnd-inhibited-notification { color: @overlay; }
+#custom-notification.dnd-inhibited-notification {
+  color: @overlay;
+}
 
 /* ── power button + menus ───────────────────── */
 #custom-power {
@@ -345,10 +408,13 @@ trough highlight {
 }
 
 menu {
-  background: @mantle;
+  background-image: none;
+  background-color: @mantle;
   color: @text;
-  border: 1px solid alpha(@lavender, 0.3);
-  border-radius: 10px;
+  border: 1px solid alpha(@sky, 0.4);
+  border-left: 3px solid @sky;
+  border-radius: 6px;
+  box-shadow: none;
 }
 
 menu > * {
@@ -361,9 +427,15 @@ menu > *:hover {
 }
 
 /* ── misc modules ───────────────────────────── */
-#custom-screen-time { color: @yellow; }
-#custom-updates     { color: @teal; }
-#custom-updates.pending { color: @peach; }
+#custom-screen-time {
+  color: @yellow;
+}
+#custom-updates {
+  color: @teal;
+}
+#custom-updates.pending {
+  color: @peach;
+}
 
 /* ── tray ───────────────────────────────────── */
 #tray {
@@ -381,15 +453,32 @@ menu > *:hover {
 }
 
 /* ── tooltips (all modules; weather's is the big one) ── */
+/* HUD tooltip: dark panel, thin cyan frame, thick cyan bar on the left, small radius.
+   GTK draws a tooltip as nested nodes (tooltip, tooltip.background, decoration), each with its
+   own background and shadow; they must all share the same radius or square edges show through. */
+tooltip,
+tooltip.background,
+tooltip decoration {
+  background-image: none;
+  background-color: alpha(@crust, 0.97);
+  border-radius: 6px;
+  box-shadow: none;
+}
+
 tooltip {
-  background: alpha(@mantle, 0.97);
-  border: 1px solid alpha(@lavender, 0.3);
-  border-radius: 14px;
+  border: 1px solid alpha(@sky, 0.4);
+  border-left: 3px solid @sky;
+}
+
+.popup > * {
+  box-shadow: none;
+  outline: none;
+  border-radius: 6px;
 }
 
 tooltip label {
   color: @text;
-  padding: 6px 10px;
+  padding: 8px 14px 8px 12px;
 }
 
 /* ── window title (plain text, no pill) ─────── */
@@ -409,17 +498,33 @@ window#waybar.empty #window {
   padding: 0 14px;
   color: @subtext;
 }
-#custom-weather.clear      { color: @yellow; }
-#custom-weather.clear.night { color: @lavender; }
-#custom-weather.cloud      { color: @subtext; }
-#custom-weather.rain       { color: @blue; }
-#custom-weather.storm      { color: @mauve; }
-#custom-weather.fog        { color: @overlay; }
-#custom-weather.snow       { color: @sky; }
+#custom-weather.clear {
+  color: @yellow;
+}
+#custom-weather.clear.night {
+  color: @lavender;
+}
+#custom-weather.cloud {
+  color: @subtext;
+}
+#custom-weather.rain {
+  color: @blue;
+}
+#custom-weather.storm {
+  color: @mauve;
+}
+#custom-weather.fog {
+  color: @overlay;
+}
+#custom-weather.snow {
+  color: @sky;
+}
 #custom-weather.rain-likely {
   border-color: alpha(@blue, 0.45);
 }
-#custom-weather.stale      { opacity: 0.6; }
+#custom-weather.stale {
+  opacity: 0.6;
+}
 #custom-weather.offline {
   background: transparent;
   border: none;
