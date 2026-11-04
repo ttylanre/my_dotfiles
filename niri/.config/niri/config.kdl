@@ -19,6 +19,7 @@ input {
         tap
         dwt                          // disable while typing
         natural-scroll
+		middle-emulation             // Enables simultaneous L+R click as middle click
         accel-speed 0.2
         click-method "clickfinger"
     }
@@ -304,6 +305,41 @@ overview {
         spread 5
         offset x=0 y=8
         color "#00000066"
+    }
+}
+
+recent-windows {
+    // Snappy: appears almost instantly, commits focus quickly
+    debounce-ms 300
+    open-delay-ms 60
+
+    highlight {
+        // Mauve frame, the far end of your focus-ring gradient.
+        // Alpha keeps it soft against the dimmed backdrop.
+        active-color "#cba6f7e6"
+        // Red, shown darker on unfocused windows that are urgent
+        urgent-color "#f38ba8e6"
+        padding 20
+        // Concentric with your 12px window corners: 12 + 20 padding
+        corner-radius 12
+    }
+
+    previews {
+        // Bigger previews so you can actually read window contents.
+        // On your 1366x768 laptop panel max-scale (0.6) is the limit,
+        // on the 1.3x HDMI display max-height is.
+        max-height 520
+        max-scale 0.6
+    }
+
+    binds {
+        Alt+Tab         { next-window; }
+        Alt+Shift+Tab   { previous-window; }
+        Alt+grave       { next-window     filter="app-id"; }
+        Alt+Shift+grave { previous-window filter="app-id"; }
+
+        Mod+Alt+Tab       { next-window     scope="output"; }
+        Mod+Alt+Shift+Tab { previous-window scope="output"; }
     }
 }
 

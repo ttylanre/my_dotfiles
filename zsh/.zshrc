@@ -47,7 +47,7 @@ INSERT_MODE_INDICATOR="%F{green}[INSERT]%f"
 VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
 
 plugins=(git vi-mode sudo copypath copyfile)
-for plugin in fancy-ctrl-z zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search; do
+for plugin in fzf-tab zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search; do
     if [[ -d "$ZSH_CUSTOM/plugins/$plugin" || -d "$ZSH/plugins/$plugin" ]]; then
         plugins+=("$plugin")
     fi
