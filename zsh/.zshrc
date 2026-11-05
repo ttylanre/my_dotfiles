@@ -324,6 +324,11 @@ export FZF_DEFAULT_OPTS=" \
 --color=pointer:#b4befe,marker:#a6e3a1,spinner:#cba6f7 \
 --color=header:#89b4fa,border:#585b70,gutter:#1e1e2e"
 
+# Add this to your desktop's shell config (~/.zshrc or ~/.bashrc)
+niri-remote() {
+    export NIRI_SOCKET=$(find /run/user/$(id -u)/ -name "niri.*.sock" 2>/dev/null | head -n 1)
+    niri msg "$@"
+}
 
 # ------------------------------------------------------------
 # NETWORK & SECURITY
