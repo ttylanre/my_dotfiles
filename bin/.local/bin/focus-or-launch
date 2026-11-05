@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+# focus-or-launch: taskbar-style app key for niri
+#
+# usage: focus-or-launch <app-id> <launch command...>
+#
+#   - app not running            -> launch it
+#   - running, not focused       -> focus its first window
+#   - running, already focused   -> cycle to the next window of that app
+#   - window sits on "stash"     -> bring it to your current workspace
+#                                   (the "minimize" restore)
+#
+# Requires: niri, jq
+
+STASH_NAME="stash"
+
+if [ $# -lt 2 ]; then
+	echo "usage: focus-or-launch <app-id> <command...>" >&2
+	exit 1
+fi
+
+app_id="${1,,}"
+shift
+
+windows_json=$(niri msg --json windows) || exit 1
+focused=$(niri msg --json focused-window 2>/dev/null | jq -r '.id // empty')
+
+# All windows matching this app-id, in stable order (by window id)
+mapfile -t ids < <(
+	jq -r --arg a "$app_id" '
+    [ .[] | select((.app_id // "" | ascii_downcase) == $a) ]
+    | sort_by(.id) | .[].id
+  ' <<<"$windows_json"
+)
+
+# Not running: launch it
+if [ ${#ids[@]} -eq 0 ]; then
+	exec "$@"
+fi
+
+# Pick the target: first window, or the one after the focused window
+next=${ids[0]}
+for i in "${!ids[@]}"; do
+	if [ "${ids[$i]}" = "$focused" ]; then
+		next=${ids[$(((i + 1) % ${#ids[@]}))]}
+		break
+	fi
+done
+
+# If the target is on the stash workspace, pull it to the current workspace
+workspaces_json=$(niri msg --json workspaces)
+
+stash_id=$(jq -r --arg n "$STASH_NAME" \
+	'.[] | select(.name == $n) | .id' <<<"$workspaces_json")
+
+if [ -n "$stash_id" ]; then
+	win_ws=$(jq -r --argjson w "$next" \
+		'.[] | select(.id == $w) | .workspace_id' <<<"$windows_json")
+
+	if [ "$win_ws" = "$stash_id" ]; then
+		cur_idx=$(jq -r '.[] | select(.is_focused) | .idx' <<<"$workspaces_json")
+		if [ -n "$cur_idx" ]; then
+			niri msg action move-window-to-workspace --window-id "$next" "$cur_idx"
+		fi
+	fi
+fi
+
+niri msg action focus-window --id "$next"

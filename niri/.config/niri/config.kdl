@@ -240,27 +240,31 @@ animations {
 
     // ── Resize: chromatic crossfade ──────────────────────────────
     // Crossfades old/new contents with an RGB split that peaks mid-resize.
+    //window-resize {
+    //    spring damping-ratio=0.9 stiffness=600 epsilon=0.0001
+    //    custom-shader r"
+    //        vec4 resize_color(vec3 coords_curr_geo, vec3 size_curr_geo) {
+    //            float p   = niri_clamped_progress;
+    //            float amt = sin(p * 3.14159265) * 0.012;
+    //            vec3 off  = vec3(amt, 0.0, 0.0);
+
+    //            vec4 pr = texture2D(niri_tex_prev, (niri_geo_to_tex_prev * (coords_curr_geo + off)).st);
+    //            vec4 pg = texture2D(niri_tex_prev, (niri_geo_to_tex_prev *  coords_curr_geo).st);
+    //            vec4 pb = texture2D(niri_tex_prev, (niri_geo_to_tex_prev * (coords_curr_geo - off)).st);
+
+    //            vec4 nr = texture2D(niri_tex_next, (niri_geo_to_tex_next * (coords_curr_geo + off)).st);
+    //            vec4 ng = texture2D(niri_tex_next, (niri_geo_to_tex_next *  coords_curr_geo).st);
+    //            vec4 nb = texture2D(niri_tex_next, (niri_geo_to_tex_next * (coords_curr_geo - off)).st);
+
+    //            vec4 prev = vec4(pr.r, pg.g, pb.b, pg.a);
+    //            vec4 next = vec4(nr.r, ng.g, nb.b, ng.a);
+    //            return mix(prev, next, p);
+    //        }
+    //    "
+    //}
+
     window-resize {
-        spring damping-ratio=0.9 stiffness=600 epsilon=0.0001
-        custom-shader r"
-            vec4 resize_color(vec3 coords_curr_geo, vec3 size_curr_geo) {
-                float p   = niri_clamped_progress;
-                float amt = sin(p * 3.14159265) * 0.012;
-                vec3 off  = vec3(amt, 0.0, 0.0);
-
-                vec4 pr = texture2D(niri_tex_prev, (niri_geo_to_tex_prev * (coords_curr_geo + off)).st);
-                vec4 pg = texture2D(niri_tex_prev, (niri_geo_to_tex_prev *  coords_curr_geo).st);
-                vec4 pb = texture2D(niri_tex_prev, (niri_geo_to_tex_prev * (coords_curr_geo - off)).st);
-
-                vec4 nr = texture2D(niri_tex_next, (niri_geo_to_tex_next * (coords_curr_geo + off)).st);
-                vec4 ng = texture2D(niri_tex_next, (niri_geo_to_tex_next *  coords_curr_geo).st);
-                vec4 nb = texture2D(niri_tex_next, (niri_geo_to_tex_next * (coords_curr_geo - off)).st);
-
-                vec4 prev = vec4(pr.r, pg.g, pb.b, pg.a);
-                vec4 next = vec4(nr.r, ng.g, nb.b, ng.a);
-                return mix(prev, next, p);
-            }
-        "
+        spring damping-ratio=0.85 stiffness=500 epsilon=0.0001
     }
 
     // ── Screenshot UI: shaders aren't supported here ─────────────
@@ -316,20 +320,20 @@ recent-windows {
     highlight {
         // Mauve frame, the far end of your focus-ring gradient.
         // Alpha keeps it soft against the dimmed backdrop.
-        active-color "#cba6f7e6"
+        active-color "#89b4fae6"
         // Red, shown darker on unfocused windows that are urgent
-        urgent-color "#f38ba8e6"
-        padding 20
+        urgent-color "#fab387"
+        padding 7
         // Concentric with your 12px window corners: 12 + 20 padding
-        corner-radius 12
+        corner-radius 6
     }
 
     previews {
         // Bigger previews so you can actually read window contents.
         // On your 1366x768 laptop panel max-scale (0.6) is the limit,
         // on the 1.3x HDMI display max-height is.
-        max-height 520
-        max-scale 0.6
+        max-height 400
+        max-scale 0.5
     }
 
     binds {
@@ -350,6 +354,7 @@ recent-windows {
 workspace "\u{f120}"
 workspace "\u{f0ac}"
 workspace "\u{f121}"
+workspace "stash"
 
 // Pin workspaces to a monitor (optional):
 // workspace "\u{f0ac}" { open-on-output "HDMI-A-1"; }
@@ -561,6 +566,7 @@ window-rule {
     match app-id=r#"librewolf$"#
     match app-id=r#"google-chrome$"#
     match app-id=r#"^firefox$"#
+    match app-id=r#"browser$"#
     open-on-workspace "\u{f0ac}"
     open-focused true
     default-column-width { proportion 0.9; }
@@ -568,11 +574,6 @@ window-rule {
     background-effect {
         blur true
     }
-}
-
-window-rule {
-    match app-id="firefox"
-    default-column-width { proportion 0.66667; }
 }
 
 // Picture-in-picture: small, floating, bottom-right, fully opaque.
@@ -595,6 +596,7 @@ window-rule {
     match app-id=r#"^dev\.zed\.Zed$"#
     match app-id=r#"^jetbrains-idea$"#
     match app-id=r#"^codium$"#
+    match app-id=r#"^com\.microsoft\.VSCode$"#
     match app-id=r#"^Vivado$"# title=r#"^Vivado 2022\.2$"#
     match app-id=r#"^Vitis IDE$"#
     match app-id=r#"^uv4\.exe"#
@@ -682,6 +684,14 @@ binds {
     Mod+C { spawn "default-editor"; }
     Mod+Shift+S hotkey-overlay-title="Edit niri config" { spawn-sh "kitty nvim ~/.config/niri/config.kdl"; }
 
+    // ── PINNED APPS (taskbar-style: focus / cycle / launch) ─────────────────
+    Mod+1 { spawn "focus-or-launch" "kitty" "default-terminal"; }
+    Mod+2 { spawn "focus-or-launch" "firefox" "default-browser"; }
+    Mod+3 { spawn "focus-or-launch" "com.microsoft.VSCode" "code"; }
+    Mod+4 { spawn "focus-or-launch" "thunar" "default-fm"; }
+    Mod+5 { spawn "focus-or-launch" "vesktop" "vesktop"; }
+    Mod+6 { spawn "focus-or-launch" "org.pwmt.zathura" "zathura"; }
+
     Mod+D { spawn-sh "pkill fuzzel || fuzzel"; }
     Mod+Comma hotkey-overlay-title="Show Emojis" repeat=false { spawn-sh "pkill fuzzel || fuzzel-emoji"; }
 
@@ -717,6 +727,7 @@ binds {
     // ── WINDOW MANAGEMENT & CLOSING ─────────────────────────────────────────
     // ────────────────────────────────────────────────────────────────────────
     Mod+Q { close-window; }
+    Alt+F4 { close-window; }
 
     Mod+Ctrl+Shift+Delete hotkey-overlay-title="Kill all windows (Global)" {
         spawn "sh" "-c" "niri msg --json windows | jq -r '.[].id' | xargs -r -I {} niri msg action close-window --id {}"
@@ -813,25 +824,30 @@ binds {
     // ────────────────────────────────────────────────────────────────────────
     // ── WORKSPACES ──────────────────────────────────────────────────────────
     // ────────────────────────────────────────────────────────────────────────
-    Mod+1 { focus-workspace 1; }
-    Mod+2 { focus-workspace 2; }
-    Mod+3 { focus-workspace 3; }
-    Mod+4 { focus-workspace 4; }
-    Mod+5 { focus-workspace 5; }
-    Mod+6 { focus-workspace 6; }
-    Mod+7 { focus-workspace 7; }
-    Mod+8 { focus-workspace 8; }
-    Mod+9 { focus-workspace 9; }
+    Mod+Ctrl+1 { focus-workspace 1; }
+    Mod+Ctrl+2 { focus-workspace 2; }
+    Mod+Ctrl+3 { focus-workspace 3; }
+    Mod+Ctrl+4 { focus-workspace 4; }
+    Mod+Ctrl+5 { focus-workspace 5; }
+    Mod+Ctrl+6 { focus-workspace 6; }
+    Mod+Ctrl+7 { focus-workspace 7; }
+    Mod+Ctrl+8 { focus-workspace 8; }
+    Mod+Ctrl+9 { focus-workspace 9; }
 
-    Mod+Shift+1 { move-column-to-workspace 1; }
-    Mod+Shift+2 { move-column-to-workspace 2; }
-    Mod+Shift+3 { move-column-to-workspace 3; }
-    Mod+Shift+4 { move-column-to-workspace 4; }
-    Mod+Shift+5 { move-column-to-workspace 5; }
-    Mod+Shift+6 { move-column-to-workspace 6; }
-    Mod+Shift+7 { move-column-to-workspace 7; }
-    Mod+Shift+8 { move-column-to-workspace 8; }
-    Mod+Shift+9 { move-column-to-workspace 9; }
+    Mod+Ctrl+Shift+1 { move-column-to-workspace 1; }
+    Mod+Ctrl+Shift+2 { move-column-to-workspace 2; }
+    Mod+Ctrl+Shift+3 { move-column-to-workspace 3; }
+    Mod+Ctrl+Shift+4 { move-column-to-workspace 4; }
+    Mod+Ctrl+Shift+5 { move-column-to-workspace 5; }
+    Mod+Ctrl+Shift+6 { move-column-to-workspace 6; }
+    Mod+Ctrl+Shift+7 { move-column-to-workspace 7; }
+    Mod+Ctrl+Shift+8 { move-column-to-workspace 8; }
+    Mod+Ctrl+Shift+9 { move-column-to-workspace 9; }
+
+	// Moving the active window to the stash (minimize) workspace
+    Mod+Shift+M       { focus-workspace "stash"; }
+    // Toggle focus directly to the stash (minimize) workspace
+	Mod+M { move-window-to-workspace "stash" focus=false; }
 
     Mod+Tab       { focus-workspace-down; }
     Mod+Shift+Tab { focus-workspace-up; }
