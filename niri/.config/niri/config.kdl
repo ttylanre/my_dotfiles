@@ -28,10 +28,10 @@ input {
         accel-speed 0.0
     }
 
-    // focus-follows-mouse max-scroll-amount="0%"   // optional: sloppy focus
-    // warp-mouse-to-focus
+    focus-follows-mouse max-scroll-amount="0%"   // optional: sloppy focus
+    warp-mouse-to-focus
 
-    disable-power-key-handling
+    //disable-power-key-handling
 }
 
 cursor {
@@ -355,6 +355,7 @@ workspace "\u{f120}"
 workspace "\u{f0ac}"
 workspace "\u{f121}"
 workspace "stash"
+workspace "swallowed"
 
 // Pin workspaces to a monitor (optional):
 // workspace "\u{f0ac}" { open-on-output "HDMI-A-1"; }
@@ -928,6 +929,7 @@ spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
 // Misc
 spawn-at-startup "niri-screen-time" "-daemon"
 spawn-at-startup "wname" "LG4D"                        // Java-app compositor-name hack
+spawn-at-startup "python3 ~/.local/bin/niri-swallow.py"
 
 // If you want niri-managed X11 apps again, delete the `xwayland-satellite { off }`
 // block above and the DISPLAY line in `environment`; niri will spawn it on demand.
