@@ -41,7 +41,11 @@ typeset -gi IS_TERMUX=0
 # 2. ENVIRONMENT & PATH
 # ------------------------------------------------------------
 export LANG="${LANG:-en_US.UTF-8}"
-export MANPATH="/usr/local/man:${MANPATH:-}"
+if (( IS_TERMUX )); then
+    export MANPATH="$PREFIX/share/man:${MANPATH:-}"
+else
+    export MANPATH="/usr/local/man:${MANPATH:-}"
+fi
 export TERMINAL="kitty"
 export BROWSER="qutebrowser"
 export FILEMANAGER="thunar"
@@ -181,7 +185,11 @@ if   has bat;    then _bat=bat
 elif has batcat; then _bat=batcat
 fi
 # Coloured man pages via bat
-[[ -n $_bat ]] && export MANPAGER="sh -c 'col -bx | $_bat -l man -p'"
+if (( ! IS_TERMUX )); then
+    [[ -n $_bat ]] && export MANPAGER="sh -c 'col -bx | $_bat -l man -p'"
+else
+    export MANPAGER="less"
+fi
 
 # --- fzf (needs fzf ≥ 0.48 for `fzf --zsh`) ------------------
 if has fzf; then
